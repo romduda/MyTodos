@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/romduda/MyTodos#readme",
   "devDependencies": {
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.24.0"
   },
   "config": {
     "commitizen": {
