@@ -1,0 +1,27 @@
+{
+  "name": "mytodos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romduda/MyTodos.git"
+  },
+  "author": "Roman Duda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romduda/MyTodos/issues"
+  },
+  "homepage": "https://github.com/romduda/MyTodos#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
