@@ -7,27 +7,27 @@ const listSchema = require('./schemas/list');
 const userSchema = Schema({
   firstName: {
     type: String,
-    require: true,
+    required: true,
     default: '',
   },
   lastName: {
     type: String,
-    require: true,
+    required: true,
     default: '',
   },
   email: {
     type: String,
-    require: true,
+    required: true,
     default: '',
   },
   password: {
     type: String,
-    require: true,
+    required: true,
     default: '',
   },
   lists: {
     type: [listSchema],
-    require: true,
+    required: true,
     default: [],
   },
 }, { timestamps: true });

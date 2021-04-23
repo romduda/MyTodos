@@ -4,17 +4,22 @@ async function getLists(req, res) {
   const { userId } = req.params;
   try {
     // TODO: should throw error if user does not exist, and not hang
-    const { lists } = await user.findById(userId);
-
-    if (lists) {
-      res.status(200);
-      res.send(lists);
-    } else {
-      res.status(400);
-      res.send({ message: 'Did not find lists for user' });
-    }
+    const currUser = await user.findById(userId);
+    const populatedLists = await currUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
+    res.status(200);
+    res.send(populatedLists.lists);
   } catch (error) {
     res.status(500);
+    res.send({ error, message: 'Did not find lists for user' });
     console.error(error); // eslint-disable-line
   }
 }

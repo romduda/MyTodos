@@ -5,23 +5,30 @@ const mongoose = require('./index');
 const taskSchema = Schema({
   title: {
     type: String,
-    require: true,
-    default: '',
-  },
-  notes: {
-    type: String,
-    require: true,
+    required: true,
     default: '',
   },
   complete: {
     type: Boolean,
-    require: true,
     default: false,
   },
-  lists: {
-    type: [{ type: Schema.Types.ObjectId, ref: 'List' }],
-    require: true,
+  notes: {
+    type: String,
+    default: '',
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
+  // lists: {
+  //   type: [{ type: Schema.Types.ObjectId, ref: 'List' }],
+  //   require: true,
+  // },
+  // sections: {
+  //   type: [{ type: Schema.Types.ObjectId, ref: 'Section' }],
+  //   require: true,
+  // },
 }, { timestamps: true });
 
 const Task = mongoose.model('Task', taskSchema);
