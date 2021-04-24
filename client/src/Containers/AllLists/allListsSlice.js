@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchAllLists, addList } from './allListsAPI';
 
@@ -13,18 +15,14 @@ const initialState = {
 // typically used to make async requests.
 export const fetchAllListsAsync = createAsyncThunk(
   'allLists/fetchAllLists',
-  async () => {
-    // The value we return becomes the `fulfilled` action payload
-    return await fetchAllLists();
-  }
+  // The value we return becomes the `fulfilled` action payload
+  async () => fetchAllLists(),
 );
 
 export const addListAsync = createAsyncThunk(
   'allLists/addList',
-  async (title) => {
-    // The value we return becomes the `fulfilled` action payload
-    return await addList(title);
-  }
+  // The value we return becomes the `fulfilled` action payload
+  async (title) => addList(title),
 );
 
 export const allListsSlice = createSlice({

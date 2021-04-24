@@ -7,18 +7,20 @@ export async function fetchAllLists() {
     const res = await fetch(`${baseUrl}/users/${userId}/lists`);
     return await res.json();
   } catch (error) {
-    console.error(error);
+    console.error(error); // eslint-disable-line
+    return null;
   }
 }
 export async function addList(title) {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({title})
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title }),
     });
     return await res.json();
   } catch (error) {
-    console.error(error);
+    console.error(error); // eslint-disable-line
+    return null;
   }
 }
