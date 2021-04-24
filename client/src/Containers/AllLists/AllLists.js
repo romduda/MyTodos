@@ -13,11 +13,9 @@ export function AllLists() {
   const lists = useSelector(selectLists);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAllListsAsync())
+    dispatch(fetchAllListsAsync());
   }, [dispatch]);
-  const renderedLists = lists.map((list) => {
-    return <ListItem key={list._id} title={list.title} />;
-  });
+  const renderedLists = lists.map((list) => <ListItem key={list._id} title={list.title} />);
   return (
     <div>
       <h1>Lists</h1>

@@ -1,7 +1,7 @@
 import './AddList.css';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export function AddList({addListHandler}) {
+export function AddList({ addListHandler }) {
   const [list, setList] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
@@ -21,14 +21,15 @@ export function AddList({addListHandler}) {
   }
 
   const alert = !showAlert ? '' : (
-    <div class="alert alert-danger" role="alert">
+    <div className="alert alert-danger" role="alert">
       There was a problem creating the list, please try again.
-    </div>);
+    </div>
+  );
 
   return (
     <div className="AddList">
-      <form onChange={handleChange} onSubmit={handleSubmit} >
-        <input value={list} type="text"/>
+      <form onChange={handleChange} onSubmit={handleSubmit}>
+        <input value={list} type="text" />
       </form>
       {alert}
     </div>
