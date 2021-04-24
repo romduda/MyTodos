@@ -1,7 +1,15 @@
 import './AddList.css';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  addListAsync,
+} from '../../Containers/AllLists/allListsSlice';
 
-export function AddList({ addListHandler }) {
+// TODO: Move into Containers / Features since this is doing stuff now
+
+export function AddList() {
+  const dispatch = useDispatch();
+
   const [list, setList] = useState('');
   const [showAlert, setShowAlert] = useState(false);
 
@@ -11,7 +19,8 @@ export function AddList({ addListHandler }) {
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await addListHandler(list);
+    const res = await dispatch(addListAsync(list));
+    console.log(res);
     if (res) {
       setShowAlert(false);
       setList('');
@@ -28,8 +37,16 @@ export function AddList({ addListHandler }) {
 
   return (
     <div className="AddList">
-      <form onChange={handleChange} onSubmit={handleSubmit}>
-        <input value={list} type="text" />
+      <form onSubmit={handleSubmit}>
+        <span>+ </span>
+        <input
+          onChange={handleChange}
+          value={list}
+          type="text"
+          placeholder="Add List"
+          onFocus={(e) => (e.target.placeholder = 'New List')} // eslint-disable-line
+          onBlur={(e) => (e.target.placeholder = 'Add List')} // eslint-disable-line
+        />
       </form>
       {alert}
     </div>

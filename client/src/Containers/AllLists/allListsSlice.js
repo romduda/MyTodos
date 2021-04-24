@@ -55,6 +55,13 @@ export const allListsSlice = createSlice({
       .addCase(fetchAllListsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
+      })
+      .addCase(addListAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addListAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
       });
   },
 });
@@ -65,6 +72,7 @@ export const { increment, decrement, incrementByAmount } = allListsSlice.actions
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectLists = (state) => state.allLists.lists;
+export const selectStatus = (state) => state.allLists.status;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
