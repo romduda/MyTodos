@@ -6,7 +6,7 @@ export function AddList({addListHandler}) {
   const [showAlert, setShowAlert] = useState(false);
 
   function handleChange(e) {
-    const value = e.target.value;
+    const { value } = e.target;
     setList(value);
   }
   async function handleSubmit(e) {
