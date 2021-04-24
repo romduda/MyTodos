@@ -36,7 +36,15 @@
     ],
     "rules": {
       "react/prop-types": 0,
-      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+      "react/jsx-filename-extension": [
+        1,
+        {
+          "extensions": [
+            ".js",
+            ".jsx"
+          ]
+        }
+      ],
       "no-underscore-dangle": 0,
       "import/prefer-default-export": 0
     }
