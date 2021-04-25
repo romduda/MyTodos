@@ -18,8 +18,18 @@ async function addTask(req, res) {
     const section = await list.sections.id(sectionId);
     section.tasks = [newTask._id, ...section.tasks];
     const updatedUser = await currUser.save();
+    const populatedUser = await updatedUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
     res.status(201);
-    res.send(updatedUser);
+    res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
     res.send({ error, message: 'Could not add task' });
@@ -27,7 +37,7 @@ async function addTask(req, res) {
   }
 }
 
-// I think use this also for removing a from a particular list,
+// I think use this also for removing a task from a particular list,
 // without deleting it from all the lists it's in.
 async function updateTask(req, res) {
   const { userId } = req.params;
