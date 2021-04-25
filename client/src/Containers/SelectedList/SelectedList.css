@@ -4,3 +4,8 @@
   margin-left: auto;
   margin-right: auto;
 }
+
+.SelectedList__header {
+  display: flex;
+  align-items: center;
+}
