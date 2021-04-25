@@ -9,6 +9,8 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import { makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { setShowAddSectionForm } from '../../Containers/SelectedList/selectedListSlice';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ListMenu() {
+  // Material-UI menu
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -54,6 +57,13 @@ export function ListMenu() {
     prevOpen.current = open;
   }, [open]);
 
+  // Handle showing Add Section form
+  const dispatch = useDispatch();
+
+  function addSectionClickHandler(e) {
+    handleClose(e);
+    dispatch(setShowAddSectionForm(true));
+  }
   return (
     <div className={classes.root}>
       <div>
@@ -74,7 +84,7 @@ export function ListMenu() {
               <Paper>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
-                    <MenuItem onClick={handleClose}>Add section</MenuItem>
+                    <MenuItem onClick={addSectionClickHandler}>Add section</MenuItem>
                     <MenuItem onClick={handleClose}>Delete list</MenuItem>
                   </MenuList>
                 </ClickAwayListener>

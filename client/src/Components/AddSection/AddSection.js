@@ -1,5 +1,5 @@
 import './AddSection.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   addSectionAsync,
@@ -12,6 +12,11 @@ export function AddSection({ listId }) {
 
   const [section, setSection] = useState('');
   const [showAlert, setShowAlert] = useState(false);
+
+  const textInput = useRef(null);
+  useEffect(() => {
+    textInput.current.focus();
+  }, []);
 
   function handleChange(e) {
     const { value } = e.target;
@@ -39,6 +44,7 @@ export function AddSection({ listId }) {
     <div className="AddSection">
       <form onSubmit={handleSubmit}>
         <input
+          ref={textInput}
           onChange={handleChange}
           value={section}
           type="text"

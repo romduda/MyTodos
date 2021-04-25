@@ -2,12 +2,15 @@ import './SelectedList.css';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { selectCurrentList } from '../AllLists/allListsSlice';
+import { selectShowAddSectionForm } from './selectedListSlice';
 import { Section } from '../../Components/Section/Section';
 import { ListMenu } from '../../Components/ListMenu/ListMenu';
 import { AddSection } from '../../Components/AddSection/AddSection';
 
 export function SelectedList() {
   const currentList = useSelector(selectCurrentList);
+  const showAddSectionForm = useSelector(selectShowAddSectionForm);
+
   let sections;
   if (currentList) {
     sections = currentList.sections.map((section) => (
@@ -24,6 +27,15 @@ export function SelectedList() {
     sections = '';
   }
 
+  let addSectionForm;
+  if (showAddSectionForm) {
+    addSectionForm = (
+      <AddSection listId={currentList ? currentList._id : ''} />
+    );
+  } else {
+    addSectionForm = '';
+  }
+
   return (
     <div className="SelectedList">
       <div className="SelectedList__header">
@@ -31,7 +43,7 @@ export function SelectedList() {
         <ListMenu />
       </div>
       {sections}
-      <AddSection listId={currentList ? currentList._id : ''} />
+      {addSectionForm}
     </div>
   );
 }
