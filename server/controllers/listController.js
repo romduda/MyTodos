@@ -5,7 +5,7 @@ async function getLists(req, res) {
   try {
     // TODO: should throw error if user does not exist, and not hang
     const currUser = await user.findById(userId);
-    const populatedLists = await currUser.populate({
+    const populatedUser = await currUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
@@ -16,7 +16,7 @@ async function getLists(req, res) {
     })
       .execPopulate();
     res.status(200);
-    res.send(populatedLists.lists);
+    res.send(populatedUser.lists);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Did not find lists for user' });
