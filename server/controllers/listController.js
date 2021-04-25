@@ -40,9 +40,18 @@ async function addList(req, res) {
         }, ...lists],
       },
       { new: true });
-
+      const populatedUser = await updatedUser.populate({
+        path: 'lists',
+        populate: {
+          path: 'sections',
+          populate: {
+            path: 'tasks',
+          },
+        },
+      })
+        .execPopulate();
       res.status(201);
-      res.send(updatedUser.lists);
+      res.send(populatedUser.lists);
     } catch (error) {
       res.status(400);
       res.send({ error, message: 'Could not add list' });
@@ -59,8 +68,17 @@ async function deleteList(req, res) {
     const list = await currUser.lists.id(listId);
     await list.remove();
     const updatedUser = await currUser.save();
-
-    res.status(200).send(updatedUser);
+    const populatedUser = await updatedUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
+    res.status(200).send(populatedUser.lists);
   } catch (error) {
     res.status(400);
     res.send({ error, message: 'Could not delete list' });

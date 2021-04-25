@@ -25,6 +25,19 @@ export async function addList(title) {
   }
 }
 
+export async function deleteList(listId) {
+  try {
+    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error); // eslint-disable-line
+    return null;
+  }
+}
+
 export async function addSection({ title, listId }) {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/`, {
