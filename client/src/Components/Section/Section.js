@@ -13,7 +13,7 @@ export function Section({
   const renderedTitle = isDefaultSection
     ? ''
     : (<h3 className="Section__title">{title}</h3>);
-  const renderedTasks = tasks.map((task) => (<Task title={task.title} />));
+  const renderedTasks = tasks.map((task) => (<Task key={task._id} title={task.title} />));
   return (
     <div className="Section">
       {renderedTitle}

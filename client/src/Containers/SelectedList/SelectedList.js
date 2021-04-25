@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentList } from '../AllLists/allListsSlice';
 import { Section } from '../../Components/Section/Section';
 import { ListMenu } from '../../Components/ListMenu/ListMenu';
+import { AddSection } from '../../Components/AddSection/AddSection';
 
 export function SelectedList() {
   const currentList = useSelector(selectCurrentList);
@@ -11,6 +12,7 @@ export function SelectedList() {
   if (currentList) {
     sections = currentList.sections.map((section) => (
       <Section
+        key={section._id}
         title={section.title}
         sectionId={section._id}
         listId={currentList._id}
@@ -29,6 +31,7 @@ export function SelectedList() {
         <ListMenu />
       </div>
       {sections}
+      <AddSection listId={currentList ? currentList._id : ''} />
     </div>
   );
 }

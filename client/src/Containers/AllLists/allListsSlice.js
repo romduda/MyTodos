@@ -1,7 +1,9 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllLists, addList, addTask } from './allListsAPI';
+import {
+  fetchAllLists, addList, addTask, addSection,
+} from './allListsAPI';
 
 const initialState = {
   lists: [],
@@ -24,6 +26,12 @@ export const addListAsync = createAsyncThunk(
   'allLists/addList',
   // The value we return becomes the `fulfilled` action payload
   async (title) => addList(title),
+);
+
+export const addSectionAsync = createAsyncThunk(
+  'allLists/addSection',
+  // The value we return becomes the `fulfilled` action payload
+  async ({ title, listId }) => addSection({ title, listId }),
 );
 
 export const addTaskAsync = createAsyncThunk(
@@ -70,6 +78,14 @@ export const allListsSlice = createSlice({
       .addCase(addListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
+      })
+      .addCase(addSectionAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addSectionAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
+        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
       })
       .addCase(addTaskAsync.pending, (state) => {
         state.status = 'loading';
