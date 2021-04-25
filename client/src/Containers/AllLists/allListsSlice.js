@@ -1,11 +1,12 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAllLists, addList } from './allListsAPI';
+import { fetchAllLists, addList, addTask } from './allListsAPI';
 
 const initialState = {
   lists: [],
   status: 'idle',
+  currentList: null,
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -25,6 +26,12 @@ export const addListAsync = createAsyncThunk(
   async (title) => addList(title),
 );
 
+export const addTaskAsync = createAsyncThunk(
+  'allLists/addTask',
+  // The value we return becomes the `fulfilled` action payload
+  async ({ title, listId, sectionId }) => addTask({ title, listId, sectionId }),
+);
+
 export const allListsSlice = createSlice({
   name: 'allLists',
   initialState,
@@ -41,8 +48,8 @@ export const allListsSlice = createSlice({
       state.value -= 1;
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    showList: (state, action) => {
+      state.currentList = state.lists.find((list) => list._id === action.payload);
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -55,6 +62,7 @@ export const allListsSlice = createSlice({
       .addCase(fetchAllListsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
+        [state.currentList] = action.payload;
       })
       .addCase(addListAsync.pending, (state) => {
         state.status = 'loading';
@@ -62,24 +70,33 @@ export const allListsSlice = createSlice({
       .addCase(addListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
+      })
+      .addCase(addTaskAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addTaskAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
+        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
       });
   },
 });
 
-export const { increment, decrement, incrementByAmount } = allListsSlice.actions;
+export const { increment, decrement, showList } = allListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
 export const selectLists = (state) => state.allLists.lists;
 export const selectStatus = (state) => state.allLists.status;
+export const selectCurrentList = (state) => state.allLists.currentList;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
 export const incrementIfOdd = (amount) => (dispatch, getState) => {
   const currentValue = selectLists(getState());
   if (currentValue % 2 === 1) {
-    dispatch(incrementByAmount(amount));
+    dispatch(increment(amount));
   }
 };
 

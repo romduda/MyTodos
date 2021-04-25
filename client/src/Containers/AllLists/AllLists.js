@@ -28,14 +28,20 @@ export function AllLists() {
   }
   if (status === 'idle') {
     loadingIndicator = (
-      <div>Synced with database</div>
+      <div>✓ Synced with database</div>
     );
   }
-  const renderedLists = lists.map((list) => <ListItem key={list._id} title={list.title} />);
+  const renderedLists = lists.map((list) => (
+    <ListItem
+      key={list._id}
+      title={list.title}
+      id={list._id}
+    />
+  ));
   return (
-    <div>
+    <div className="AllLists">
       <h1>Lists</h1>
-      {loadingIndicator}
+      <div className="AllLists__loadingIndicator">{loadingIndicator}</div>
       <AddList addListHandler={addListAsync} />
       <div>{renderedLists}</div>
     </div>

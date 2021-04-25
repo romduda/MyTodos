@@ -1,0 +1,19 @@
+.AddTask {
+  padding: 0.5rem 1rem;
+}
+form {
+  display: flex;
+}
+
+input[type="text"] {
+  font-size: 1rem;
+  width: 100%;
+  border: none;
+}
+input[type="text"]:focus {
+  border: none;
+  outline: none;
+}
+.AddTask__plus-icon {
+  width: 28px;
+}

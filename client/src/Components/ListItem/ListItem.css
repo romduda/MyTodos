@@ -1,0 +1,20 @@
+.ListItem {
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.ListItem:hover {
+  background-color: rgb(232, 232, 232);
+  border-radius: 5px;
+}
+
+.ListItem__color {
+  margin-right: 0.5rem;
+  background-color: lightgray;
+  border: 1px dashed black;
+  border-radius: 50%;
+  height: 1rem;
+  width: 1rem;
+  justify-content: center;
+}

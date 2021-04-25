@@ -28,7 +28,7 @@ export function AddList() {
       setShowAlert(true);
     }
   }
-
+  // TODO: Set this to appear if error with adding list
   const alert = !showAlert ? '' : (
     <div className="alert alert-danger" role="alert">
       There was a problem creating the list, please try again.

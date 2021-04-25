@@ -1,0 +1,10 @@
+.AllLists {
+  border: 1px solid gray;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+.AllLists__loadingIndicator {
+  margin: 0.5rem 0;
+  font-size: 0.75rem;
+}

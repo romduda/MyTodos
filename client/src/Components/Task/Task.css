@@ -1,0 +1,19 @@
+.Task {
+  display: flex;
+  padding: 0.5rem 1rem;
+}
+
+.Task__checkbox {
+  transform: scale(1.3);
+  outline-color: 1px solid red;
+}
+
+.Task__checkbox-wrap {
+  padding-right: 0.5rem;
+}
+
+.Task:hover {
+  background-color: rgb(232, 232, 232);
+  border-radius: 5px;
+}
+
