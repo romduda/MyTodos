@@ -2,7 +2,12 @@
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
-  fetchAllLists, addList, deleteList, addTask, addSection,
+  fetchAllLists,
+  addList,
+  deleteList,
+  addSection,
+  deleteSection,
+  addTask,
 } from './allListsAPI';
 
 const initialState = {
@@ -38,6 +43,12 @@ export const addSectionAsync = createAsyncThunk(
   'allLists/addSection',
   // The value we return becomes the `fulfilled` action payload
   async ({ title, listId }) => addSection({ title, listId }),
+);
+
+export const deleteSectionAsync = createAsyncThunk(
+  'allLists/deleteSection',
+  // The value we return becomes the `fulfilled` action payload
+  async ({ sectionId, listId }) => deleteSection({ sectionId, listId }),
 );
 
 export const addTaskAsync = createAsyncThunk(
@@ -97,6 +108,14 @@ export const allListsSlice = createSlice({
         state.status = 'loading';
       })
       .addCase(addSectionAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
+        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+      })
+      .addCase(deleteSectionAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(deleteSectionAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
         state.currentList = state.lists.find((list) => list._id === state.currentList._id);

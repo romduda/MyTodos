@@ -1,0 +1,16 @@
+.Section {
+  margin-bottom: 1rem;
+}
+
+.Section__header {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.Section__header--border-bottom {
+  border-bottom: 1px solid lightgray;
+}
+
+.Section__title {
+  margin-bottom: 0.5rem;
+}

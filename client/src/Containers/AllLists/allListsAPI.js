@@ -52,6 +52,19 @@ export async function addSection({ title, listId }) {
   }
 }
 
+export async function deleteSection({ listId, sectionId }) {
+  try {
+    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error); // eslint-disable-line
+    return null;
+  }
+}
+
 export async function addTask({ title, listId, sectionId }) {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`, {

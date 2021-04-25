@@ -2,6 +2,7 @@ import './Section.css';
 import React from 'react';
 import { AddTask } from '../AddTask/AddTask';
 import { Task } from '../Task/Task';
+import { SectionMenu } from '../SectionMenu/SectionMenu';
 
 export function Section({
   title,
@@ -13,10 +14,16 @@ export function Section({
   const renderedTitle = isDefaultSection
     ? ''
     : (<h3 className="Section__title">{title}</h3>);
+  const renderedSectionMenu = isDefaultSection
+    ? ''
+    : (<SectionMenu sectionId={sectionId} />);
   const renderedTasks = tasks.map((task) => (<Task key={task._id} title={task.title} />));
   return (
     <div className="Section">
-      {renderedTitle}
+      <div className={`Section__header ${isDefaultSection ? '' : 'Section__header--border-bottom'}`}>
+        {renderedTitle}
+        {renderedSectionMenu}
+      </div>
       <AddTask sectionId={sectionId} listId={listId} />
       {renderedTasks}
     </div>

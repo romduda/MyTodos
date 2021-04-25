@@ -37,8 +37,17 @@ async function deleteSection(req, res) {
     const section = await list.sections.id(sectionId);
     await section.remove();
     const updatedUser = await currUser.save();
-    res.status(201);
-    res.send(updatedUser);
+    const populatedUser = await updatedUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
+    res.status(200).send(populatedUser.lists);
   } catch (error) {
     res.status(400);
     res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
