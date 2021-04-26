@@ -42,9 +42,6 @@ async function addTask(req, res) {
 async function updateTask(req, res) {
   const { taskId } = req.params;
   const { userId } = req.params;
-  console.log('taskId', taskId);
-  console.log('useId', userId);
-  console.log('req.body', req.body);
   try {
     await task.findByIdAndUpdate(
       taskId,
