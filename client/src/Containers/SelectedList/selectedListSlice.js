@@ -5,7 +5,6 @@ import { addSectionAsync, showList } from '../AllLists/allListsSlice';
 
 const initialState = {
   showAddSectionForm: false,
-  someOtherState: null,
 };
 
 export const selectedListSlice = createSlice({

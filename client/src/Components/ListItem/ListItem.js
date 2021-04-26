@@ -12,7 +12,7 @@ export function ListItem({ title, id }) {
   return (
     <div
       onClick={onClickHandler}
-      onKeyPress={onClickHandler}
+      onKeyDown={onClickHandler}
       className="ListItem"
       role="button"
       tabIndex={0}

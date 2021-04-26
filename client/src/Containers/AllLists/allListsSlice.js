@@ -7,14 +7,15 @@ import {
   deleteList,
   addSection,
   deleteSection,
-  addTask,
+  addNewTask,
+  addExistingTask,
   updateTask,
 } from './allListsAPI';
 
 const initialState = {
   lists: [],
   status: 'idle',
-  currentList: null,
+  currentList: null, // TODO: maybe set to {}
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -52,10 +53,16 @@ export const deleteSectionAsync = createAsyncThunk(
   async ({ sectionId, listId }) => deleteSection({ sectionId, listId }),
 );
 
-export const addTaskAsync = createAsyncThunk(
-  'allLists/addTask',
+export const addNewTaskAsync = createAsyncThunk(
+  'allLists/addNewTask',
   // The value we return becomes the `fulfilled` action payload
-  async ({ title, listId, sectionId }) => addTask({ title, listId, sectionId }),
+  async ({ title, listId, sectionId }) => addNewTask({ title, listId, sectionId }),
+);
+
+export const addExistingTaskAsync = createAsyncThunk(
+  'allLists/addExistingTask',
+  // The value we return becomes the `fulfilled` action payload
+  async ({ taskId, listId, sectionId }) => addExistingTask({ taskId, listId, sectionId }),
 );
 
 export const updateTaskAsync = createAsyncThunk(
@@ -137,10 +144,18 @@ export const allListsSlice = createSlice({
         state.lists = action.payload;
         state.currentList = state.lists.find((list) => list._id === state.currentList._id);
       })
-      .addCase(addTaskAsync.pending, (state) => {
+      .addCase(addNewTaskAsync.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(addTaskAsync.fulfilled, (state, action) => {
+      .addCase(addNewTaskAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
+        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+      })
+      .addCase(addExistingTaskAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addExistingTaskAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
         state.currentList = state.lists.find((list) => list._id === state.currentList._id);
