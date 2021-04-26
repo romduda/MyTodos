@@ -7,7 +7,7 @@ const {
   deleteList,
 } = require('./controllers/listController');
 const { addSection, deleteSection } = require('./controllers/sectionController');
-const { addTask } = require('./controllers/taskController');
+const { addTask, updateTask } = require('./controllers/taskController');
 
 const router = express.Router();
 
@@ -30,5 +30,7 @@ router.delete('/users/:userId/lists/:listId/sections/:sectionId', deleteSection)
 // Tasks
 
 router.post('/users/:userId/lists/:listId/sections/:sectionId/tasks', addTask);
+
+router.put('/users/:userId/tasks/:taskId', updateTask);
 
 module.exports = router;

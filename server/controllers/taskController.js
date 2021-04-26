@@ -40,20 +40,33 @@ async function addTask(req, res) {
 // I think use this also for removing a task from a particular list,
 // without deleting it from all the lists it's in.
 async function updateTask(req, res) {
+  const { taskId } = req.params;
   const { userId } = req.params;
-  const { listId } = req.params;
-  const { sectionId } = req.params;
+  console.log('taskId', taskId);
+  console.log('useId', userId);
+  console.log('req.body', req.body);
   try {
+    await task.findByIdAndUpdate(
+      taskId,
+      req.body,
+      { new: true },
+    );
     const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    const section = await list.sections.id(sectionId);
-    await section.remove();
-    const updatedUser = await currUser.save();
-    res.status(201);
-    res.send(updatedUser);
+    const populatedUser = await currUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
+    res.status(200);
+    res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
-    res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
+    res.send({ error: JSON.stringify(error), message: 'Could not update task' });
     console.error(error); // eslint-disable-line
   }
 }
