@@ -17,7 +17,16 @@ export function Section({
   const renderedSectionMenu = isDefaultSection
     ? ''
     : (<SectionMenu sectionId={sectionId} />);
-  const renderedTasks = tasks.map((task) => (<Task key={task._id} title={task.title} />));
+  const renderedTasks = tasks.map((task) => (
+    <Task
+      key={task._id}
+      id={task._id}
+      title={task.title}
+      complete={task.complete}
+      notes={task.notes}
+      sectionId={sectionId}
+    />
+  ));
   return (
     <div className="Section">
       <div className={`Section__header ${isDefaultSection ? '' : 'Section__header--border-bottom'}`}>

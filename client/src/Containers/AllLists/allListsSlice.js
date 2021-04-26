@@ -8,6 +8,7 @@ import {
   addSection,
   deleteSection,
   addTask,
+  updateTask,
 } from './allListsAPI';
 
 const initialState = {
@@ -57,6 +58,12 @@ export const addTaskAsync = createAsyncThunk(
   async ({ title, listId, sectionId }) => addTask({ title, listId, sectionId }),
 );
 
+export const updateTaskAsync = createAsyncThunk(
+  'allLists/updateTask',
+  // The value we return becomes the `fulfilled` action payload
+  async ({ taskId, payload }) => updateTask({ taskId, payload }),
+);
+
 export const allListsSlice = createSlice({
   name: 'allLists',
   initialState,
@@ -75,6 +82,16 @@ export const allListsSlice = createSlice({
     // Use the PayloadAction type to declare the contents of `action.payload`
     showList: (state, action) => {
       state.currentList = state.lists.find((list) => list._id === action.payload);
+    },
+    // Use the PayloadAction type to declare the contents of `action.payload`
+    setTaskTitle: (state, action) => {
+      const sectionIndex = state.currentList.sections.findIndex(
+        (section) => section._id === action.payload.sectionId,
+      );
+      const taskIndex = state.currentList.sections[sectionIndex].tasks.findIndex(
+        (task) => task._id === action.payload.taskId,
+      );
+      state.currentList.sections[sectionIndex].tasks[taskIndex].title = action.payload.title;
     },
   },
   // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -127,11 +144,21 @@ export const allListsSlice = createSlice({
         state.status = 'idle';
         state.lists = action.payload;
         state.currentList = state.lists.find((list) => list._id === state.currentList._id);
+      })
+      .addCase(updateTaskAsync.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateTaskAsync.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.lists = action.payload;
+        state.currentList = state.lists.find((list) => list._id === state.currentList._id);
       });
   },
 });
 
-export const { increment, decrement, showList } = allListsSlice.actions;
+export const {
+  increment, decrement, showList, setTaskTitle,
+} = allListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

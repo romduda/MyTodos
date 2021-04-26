@@ -78,3 +78,17 @@ export async function addTask({ title, listId, sectionId }) {
     return null;
   }
 }
+
+export async function updateTask({ taskId, payload }) {
+  try {
+    const res = await fetch(`${baseUrl}/users/${userId}/tasks/${taskId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error); // eslint-disable-line
+    return null;
+  }
+}

@@ -1,6 +1,5 @@
 .Task {
   display: flex;
-  padding: 0.5rem 1rem;
 }
 
 .Task__checkbox {
@@ -12,8 +11,29 @@
   padding-right: 0.5rem;
 }
 
-.Task:hover {
+.Task__view-wrap {
+  display: flex;
+  padding: 0.5rem 1rem;
+  width: 100%;
+}
+.Task__view-wrap:hover {
   background-color: rgb(232, 232, 232);
   border-radius: 5px;
+}
+.Task__main-wrap {
+  width: 100%;
+}
+
+.Task__editing-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray;
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.Task__form-edit-title {
+  width: 100%;
 }
 
