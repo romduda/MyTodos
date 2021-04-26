@@ -6,8 +6,16 @@ const {
   addList,
   deleteList,
 } = require('./controllers/listController');
-const { addSection, deleteSection } = require('./controllers/sectionController');
-const { addTask, updateTask } = require('./controllers/taskController');
+const {
+  addSection,
+  updateSection,
+  deleteSection,
+} = require('./controllers/sectionController');
+const {
+  addNewTask,
+  addExistingTask,
+  updateTask,
+} = require('./controllers/taskController');
 
 const router = express.Router();
 
@@ -25,11 +33,15 @@ router.delete('/users/:userId/lists/:listId', deleteList);
 
 router.post('/users/:userId/lists/:listId/sections', addSection);
 
+router.put('/users/:userId/lists/:listId/sections/:sectionId', updateSection);
+
 router.delete('/users/:userId/lists/:listId/sections/:sectionId', deleteSection);
 
 // Tasks
 
-router.post('/users/:userId/lists/:listId/sections/:sectionId/tasks', addTask);
+router.post('/users/:userId/lists/:listId/sections/:sectionId/tasks', addNewTask);
+
+router.put('/users/:userId/lists/:listId/sections/:sectionId/tasks', addExistingTask);
 
 router.put('/users/:userId/tasks/:taskId', updateTask);
 

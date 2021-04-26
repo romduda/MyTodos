@@ -2,7 +2,7 @@ const user = require('../models/user');
 const task = require('../models/task');
 
 // This is creating a task that doesn't exist yet in any list
-async function addTask(req, res) {
+async function addNewTask(req, res) {
   const { userId } = req.params;
   const { listId } = req.params;
   const { sectionId } = req.params;
@@ -31,9 +31,41 @@ async function addTask(req, res) {
     res.status(201);
     res.send(populatedUser.lists);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     res.send({ error, message: 'Could not add task' });
     console.error(error); // eslint-disable-line
+  }
+}
+
+async function addExistingTask(req, res) {
+  const { userId } = req.params;
+  const { listId } = req.params;
+  const { sectionId } = req.params;
+  if (!req.body.taskId) {
+    return res.status(400).send({ message: 'Body did not include "taskId" property' });
+  }
+  try {
+    const currUser = await user.findById(userId);
+    const list = await currUser.lists.id(listId);
+    const section = await list.sections.id(sectionId);
+    section.tasks = [req.body.taskId, ...section.tasks];
+    const updatedUser = await currUser.save();
+    const populatedUser = await updatedUser.populate({
+      path: 'lists',
+      populate: {
+        path: 'sections',
+        populate: {
+          path: 'tasks',
+        },
+      },
+    })
+      .execPopulate();
+    res.status(201);
+    return res.send(populatedUser.lists);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not add task' });
+    return console.error(error); // eslint-disable-line
   }
 }
 
@@ -88,7 +120,8 @@ async function deleteTask(req, res) {
 }
 
 module.exports = {
-  addTask,
+  addNewTask,
+  addExistingTask,
   updateTask,
   deleteTask,
 };

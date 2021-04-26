@@ -27,6 +27,10 @@ async function addSection(req, res) {
   }
 }
 
+async function updateSection(req, res) {
+  res.status(200).end();
+}
+
 async function deleteSection(req, res) {
   const { userId } = req.params;
   const { listId } = req.params;
@@ -57,5 +61,6 @@ async function deleteSection(req, res) {
 
 module.exports = {
   addSection,
+  updateSection,
   deleteSection,
 };
