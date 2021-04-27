@@ -36,14 +36,24 @@ export function SelectedList() {
     addSectionForm = '';
   }
 
-  return (
-    <div className="SelectedList">
-      <div className="SelectedList__header">
-        <h1>{currentList ? currentList.title : '' }</h1>
-        <ListMenu />
+  let selectedListComponent;
+  if (currentList) {
+    selectedListComponent = (
+      <div className="SelectedList">
+        <div>Backbutton placeholder</div>
+        <div className="SelectedList__header">
+          <h1>{currentList ? currentList.title : '' }</h1>
+          <ListMenu />
+        </div>
+        {sections}
+        {addSectionForm}
       </div>
-      {sections}
-      {addSectionForm}
-    </div>
+    );
+  } else {
+    selectedListComponent = '';
+  }
+
+  return (
+    selectedListComponent
   );
 }
