@@ -44,7 +44,6 @@ async function deleteSection(req, res) {
     const currList = await list.findById(listId);
     const section = await currList.sections.id(sectionId);
     const deletedSection = await section.remove();
-    console.log('deletedSection', deletedSection);
     await currList.save();
     // Get the tasks from the deleted section, and remove the list ID from each
     // of them.

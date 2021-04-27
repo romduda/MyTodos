@@ -82,7 +82,25 @@ async function updateListsOrder(req, res) {
     res.send(updatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could update lists order' });
+    res.send({ error, message: 'Could not update lists order' });
+    console.error(error); // eslint-disable-line
+  }
+}
+
+async function updateTasksOrder(req, res) {
+  try {
+    const { listId } = req.params;
+    const currList = await list.findById(listId);
+    req.body.sections.forEach(async (section) => {
+      const currSection = await currList.sections.id(section._id);
+      currSection.tasks = [...section.tasks];
+    });
+    const updatedList = await currList.save();
+    res.status(200);
+    res.send(updatedList);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not update tasks order' });
     console.error(error); // eslint-disable-line
   }
 }
@@ -123,4 +141,5 @@ module.exports = {
   addList,
   deleteList,
   updateListsOrder,
+  updateTasksOrder,
 };

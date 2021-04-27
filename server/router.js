@@ -6,6 +6,7 @@ const {
   addList,
   deleteList,
   updateListsOrder,
+  updateTasksOrder,
 } = require('./controllers/listController');
 const {
   addSection,
@@ -31,6 +32,8 @@ router.post('/users/:userId/lists', addList);
 router.put('/users/:userId/lists', updateListsOrder);
 
 router.delete('/users/:userId/lists/:listId', deleteList);
+
+router.put('/users/:userId/lists/:listId/order', updateTasksOrder);
 
 // Sections
 
