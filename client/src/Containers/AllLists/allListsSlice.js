@@ -6,6 +6,7 @@ import {
   fetchAllLists,
   addList,
   updateListsOrderInDb,
+  updateTasksOrderInDb,
   deleteList,
   addSection,
   deleteSection,
@@ -54,8 +55,15 @@ export const updateTasksOrderAsync = createAsyncThunk(
   async (tasks, { dispatch, getState }) => {
     // eslint-disable-next-line no-use-before-define
     await dispatch(updateTasksOrder(tasks));
-    _.map(getState().allLists.lists, '_id');
-    // updateTaskOrderInDb(updatedListIds);
+    const currListId = getState().allLists.currentList._id;
+    const sections = _.map(getState().allLists.currentList.sections, (section) => {
+      const currSection = {
+        _id: section._id,
+        tasks: _.map(section.tasks, '_id'),
+      };
+      return currSection;
+    });
+    updateTasksOrderInDb(currListId, sections);
   },
 );
 

@@ -39,6 +39,20 @@ export async function updateListsOrderInDb(lists) {
   }
 }
 
+export async function updateTasksOrderInDb(listId, sections) {
+  try {
+    const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/order`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sections }),
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error); // eslint-disable-line
+    return null;
+  }
+}
+
 export async function deleteList(listId) {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}`, {
@@ -94,7 +108,6 @@ export async function addNewTask({ title, listId, sectionId }) {
 }
 
 export async function addExistingTask({ taskId, listId, sectionId }) {
-  console.log('inside addExistingTask');
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}/sections/${sectionId}/tasks`, {
       method: 'PUT',
