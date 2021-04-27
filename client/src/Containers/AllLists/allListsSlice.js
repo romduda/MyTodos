@@ -87,6 +87,11 @@ export const allListsSlice = createSlice({
     decrement: (state) => {
       state.value -= 1;
     },
+    updateListsOrder: (state, action) => {
+      const { source, destination } = action.payload;
+      const [movedList] = state.lists.splice(source.index, 1);
+      state.lists.splice(destination.index, 0, movedList);
+    },
     // Use the PayloadAction type to declare the contents of `action.payload`
     showList: (state, action) => {
       state.currentList = state.lists.find((list) => list._id === action.payload);
@@ -173,7 +178,7 @@ export const allListsSlice = createSlice({
 });
 
 export const {
-  increment, decrement, showList, setTaskTitle,
+  increment, decrement, updateListsOrder, showList, setTaskTitle,
 } = allListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
