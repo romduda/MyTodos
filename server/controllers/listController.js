@@ -91,10 +91,21 @@ async function updateTasksOrder(req, res) {
   try {
     const { listId } = req.params;
     const currList = await list.findById(listId);
+    // Update order of tasks in each section
     req.body.sections.forEach(async (section) => {
       const currSection = await currList.sections.id(section._id);
       currSection.tasks = [...section.tasks];
     });
+    // TODO Update order of sections
+    // This did NOT work:
+    // const sectionIdsNewOrder = _.map(req.body.sections, '_id');
+    // console.log('sectionIdsNewOrder', sectionIdsNewOrder);
+    // console.log('Result of sortBy', _.sortBy(currList.sections, (section) => (
+    //   sectionIdsNewOrder.indexOf(section._id)
+    // )));
+    // currList.sections = _.sortBy(currList.sections, (section) => (
+    //   sectionIdsNewOrder.indexOf(section._id)
+    // ));
     const updatedList = await currList.save();
     res.status(200);
     res.send(updatedList);
