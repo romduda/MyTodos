@@ -71,6 +71,22 @@ async function addList(req, res) {
   }
 }
 
+async function updateListsOrder(req, res) {
+  try {
+    const { userId } = req.params;
+    const updatedUser = await user.findByIdAndUpdate(userId, {
+      lists: [...req.body.lists],
+    },
+    { new: true });
+    res.status(200);
+    res.send(updatedUser.lists);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could update lists order' });
+    console.error(error); // eslint-disable-line
+  }
+}
+
 async function deleteList(req, res) {
   const { listId } = req.params;
   const { userId } = req.params;
@@ -106,4 +122,5 @@ module.exports = {
   getLists,
   addList,
   deleteList,
+  updateListsOrder,
 };
