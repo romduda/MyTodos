@@ -10,6 +10,8 @@ export function Task({
   title,
   complete,
   sectionId,
+  lists,
+  currentListId,
 }) {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
@@ -91,7 +93,10 @@ export function Task({
       </div>
     );
   }
-
+  const otherListsTaskIsIn = lists.filter((list) => list._id !== currentListId);
+  const renderedLists = otherListsTaskIsIn.map((list) => (
+    <div className="AutocompleteItem__other-list-task-is-in">{list.title}</div>
+  ));
   let renderedTask;
   if (!editing) {
     renderedTask = (
@@ -107,6 +112,7 @@ export function Task({
         >
           <div className="Task__title">{title}</div>
         </div>
+        {renderedLists}
       </div>
     );
   } else {
@@ -122,6 +128,7 @@ export function Task({
             type="text"
           />
         </form>
+        {renderedLists}
       </div>
     );
   }

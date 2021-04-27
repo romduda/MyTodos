@@ -13,6 +13,7 @@
 
 .Task__view-wrap {
   display: flex;
+  align-items: center;
   padding: 0.5rem 1rem;
   width: 100%;
 }
@@ -27,10 +28,10 @@
 .Task__editing-wrap {
   display: flex;
   align-items: center;
+  padding: 0.5rem 1rem;
   border: 1px solid gray;
   border-radius: 5px;
   width: 100%;
-  padding: 0.5rem 1rem;
 }
 
 .Task__form-edit-title {
