@@ -1,9 +1,20 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './Task.css';
 import React, { useState, useEffect, useRef } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { useDispatch } from 'react-redux';
 import { setTaskTitle, updateTaskAsync } from '../../Containers/AllLists/allListsSlice';
+
+const Container = styled.div`
+border: 1px solid lightgrey;
+border-radius: 2px;
+padding: 8px;
+margin-bottom: 8px;
+background-color: white;
+`;
 
 export function Task({
   id,
@@ -12,6 +23,7 @@ export function Task({
   sectionId,
   lists,
   currentListId,
+  index,
 }) {
   const dispatch = useDispatch();
   const [editing, setEditing] = useState(false);
@@ -134,8 +146,21 @@ export function Task({
   }
 
   return (
-    <div className="Task">
-      {renderedTask}
-    </div>
+    <Draggable
+      draggableId={id}
+      index={index}
+    >
+      {(provided) => (
+        <Container
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <div className="Task">
+            {renderedTask}
+          </div>
+        </Container>
+      )}
+    </Draggable>
   );
 }

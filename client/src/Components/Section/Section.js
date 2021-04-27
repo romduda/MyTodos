@@ -1,8 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './Section.css';
 import React from 'react';
+import { Droppable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
 import { AddTask } from '../AddTask/AddTask';
 import { Task } from '../Task/Task';
 import { SectionMenu } from '../SectionMenu/SectionMenu';
+
+const TasksWrap = styled.div`
+  padding: 8px;
+  `;
 
 export function Section({
   title,
@@ -17,7 +24,7 @@ export function Section({
   const renderedSectionMenu = isDefaultSection
     ? ''
     : (<SectionMenu sectionId={sectionId} />);
-  const renderedTasks = tasks.map((task) => (
+  const renderedTasks = tasks.map((task, index) => (
     <Task
       key={task._id}
       id={task._id}
@@ -27,6 +34,7 @@ export function Section({
       lists={task.lists}
       sectionId={sectionId}
       currentListId={listId}
+      index={index}
     />
   ));
   return (
@@ -36,7 +44,17 @@ export function Section({
         {renderedSectionMenu}
       </div>
       <AddTask sectionId={sectionId} listId={listId} />
-      {renderedTasks}
+      <Droppable droppableId={sectionId}>
+        {(provided) => (
+          <TasksWrap
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            {renderedTasks}
+            {provided.placeholder}
+          </TasksWrap>
+        )}
+      </Droppable>
     </div>
   );
 }

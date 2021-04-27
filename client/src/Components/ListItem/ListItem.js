@@ -33,9 +33,9 @@ export function ListItem({ title, id, index }) {
           ref={provided.innerRef}
         >
           <div
+            className="ListItem"
             onClick={onClickHandler}
             onKeyDown={onClickHandler}
-            className="ListItem"
             role="button"
             tabIndex={0}
           >

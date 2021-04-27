@@ -48,6 +48,17 @@ export const updateListsOrderAsync = createAsyncThunk(
   },
 );
 
+export const updateTasksOrderAsync = createAsyncThunk(
+  'allLists/updateTasksOrder',
+  // The value we return becomes the `fulfilled` action payload
+  async (tasks, { dispatch, getState }) => {
+    // eslint-disable-next-line no-use-before-define
+    await dispatch(updateTasksOrder(tasks));
+    _.map(getState().allLists.lists, '_id');
+    // updateTaskOrderInDb(updatedListIds);
+  },
+);
+
 export const deleteListAsync = createAsyncThunk(
   'allLists/deleteList',
   // The value we return becomes the `fulfilled` action payload
@@ -103,6 +114,26 @@ export const allListsSlice = createSlice({
       const { source, destination } = action.payload;
       const [movedList] = state.lists.splice(source.index, 1);
       state.lists.splice(destination.index, 0, movedList);
+    },
+    updateTasksOrder: (state, action) => {
+      const { source, destination } = action.payload;
+      const sourceSectionIndex = state.currentList.sections.findIndex(
+        (section) => section._id === source.droppableId,
+      );
+      const [movedTask] = state.currentList.sections[sourceSectionIndex].tasks
+        .splice(source.index, 1);
+      // Move task within the same section
+      if (source.droppableId === destination.droppableId) {
+        state.currentList.sections[sourceSectionIndex].tasks
+          .splice(destination.index, 0, movedTask);
+      } else {
+        // Move task to another section
+        const destinationSectionIndex = state.currentList.sections.findIndex(
+          (section) => section._id === destination.droppableId,
+        );
+        state.currentList.sections[destinationSectionIndex].tasks
+          .splice(destination.index, 0, movedTask);
+      }
     },
     // Use the PayloadAction type to declare the contents of `action.payload`
     showList: (state, action) => {
@@ -196,7 +227,7 @@ export const allListsSlice = createSlice({
 });
 
 export const {
-  increment, decrement, updateListsOrder, showList, setTaskTitle,
+  increment, decrement, updateListsOrder, showList, setTaskTitle, updateTasksOrder,
 } = allListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from

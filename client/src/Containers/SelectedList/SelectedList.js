@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import './SelectedList.css';
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectCurrentList } from '../AllLists/allListsSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { selectCurrentList, updateTasksOrderAsync } from '../AllLists/allListsSlice';
 import { selectShowAddSectionForm } from './selectedListSlice';
 import { Section } from '../../Components/Section/Section';
 import { ListMenu } from '../../Components/ListMenu/ListMenu';
@@ -10,6 +12,23 @@ import { AddSection } from '../../Components/AddSection/AddSection';
 export function SelectedList() {
   const currentList = useSelector(selectCurrentList);
   const showAddSectionForm = useSelector(selectShowAddSectionForm);
+  const dispatch = useDispatch();
+
+  function onDragEnd(result) {
+    const { destination, source } = result;
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId
+      && destination.index === source.index
+    ) {
+      // eslint-disable-next-line no-useless-return
+      return;
+    }
+    dispatch(updateTasksOrderAsync({ source, destination }));
+  }
 
   let sections;
   if (currentList) {
@@ -45,7 +64,11 @@ export function SelectedList() {
           <h1>{currentList ? currentList.title : '' }</h1>
           <ListMenu />
         </div>
-        {sections}
+        <DragDropContext
+          onDragEnd={onDragEnd}
+        >
+          {sections}
+        </DragDropContext>
         {addSectionForm}
       </div>
     );
