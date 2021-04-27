@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import _ from 'lodash';
 import {
   fetchAllLists,
   addList,
@@ -111,7 +112,7 @@ export const allListsSlice = createSlice({
       .addCase(fetchAllListsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        [state.currentList] = action.payload;
+        state.currentList = null;
       })
       .addCase(addListAsync.pending, (state) => {
         state.status = 'loading';
@@ -126,7 +127,7 @@ export const allListsSlice = createSlice({
       .addCase(deleteListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        [state.currentList] = action.payload;
+        state.currentList = null;
       })
       .addCase(addSectionAsync.pending, (state) => {
         state.status = 'loading';
@@ -181,6 +182,27 @@ export const {
 export const selectLists = (state) => state.allLists.lists;
 export const selectStatus = (state) => state.allLists.status;
 export const selectCurrentList = (state) => state.allLists.currentList;
+
+export const selectTasksInOtherLists = (state) => {
+  if (!state) return [];
+  if (!state.allLists) return [];
+  if (!state.allLists.currentList) return [];
+  const currentListId = state.allLists.currentList._id;
+  const otherLists = state.allLists.lists.filter((list) => list._id !== currentListId);
+  const sectionsInOtherLists = otherLists.reduce((acc, list,) => ( // eslint-disable-line
+    acc = [...acc, list.sections]
+  ), []);
+  const tasksInOtherLists = sectionsInOtherLists.flat().reduce((acc, section) => ( // eslint-disable-line
+    acc = [...acc, section.tasks]
+  ), []).flat();
+  const tasksInCurrentList = state.allLists.currentList.sections.flat().reduce((acc, section) => ( // eslint-disable-line
+    acc = [...acc, section.tasks]
+  ), []).flat();
+  const idsOfTasksInCurrentList = _.map(tasksInCurrentList, '_id');
+  const filteredTasksInOtherLists = tasksInOtherLists
+    .filter((task) => !_.includes(idsOfTasksInCurrentList, task._id));
+  return _.uniqBy(filteredTasksInOtherLists, '_id');
+};
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.

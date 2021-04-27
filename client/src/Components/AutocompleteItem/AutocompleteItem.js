@@ -4,17 +4,22 @@ import './AutocompleteItem.css';
 import React from 'react';
 
 export function AutocompleteItem({
-  taskTitle,
-  taskId,
+  task,
   listId,
   sectionId,
   handleAddExistingTask,
 }) {
   const taskDetails = {
-    taskId,
+    taskId: task._id,
     listId,
     sectionId,
   };
+  console.log('task inside AutocompleteItem component', task);
+  console.log('task.lists inside AutocompleteItem component', task.lists);
+  const lists = task.lists.map((list) => (
+    <div className="AutocompleteItem__other-list-task-is-in">{list.title}</div>
+  ));
+
   return (
     <div
       className="AutocompleteItem"
@@ -23,7 +28,8 @@ export function AutocompleteItem({
       tabIndex={0}
       role="button"
     >
-      {taskTitle}
+      <div className="AutocompleteItem__taskTitle">{task.title}</div>
+      {lists}
     </div>
   );
 }

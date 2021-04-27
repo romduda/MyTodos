@@ -1,25 +1,22 @@
 import './AddTask.css';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AutocompleteItem } from '../AutocompleteItem/AutocompleteItem';
 import {
   addNewTaskAsync,
   addExistingTaskAsync,
+  selectTasksInOtherLists,
 } from '../../Containers/AllLists/allListsSlice';
 
 // Mock to be replaced with state in redux store
-const tasksInOtherLists = [
-  {
-    title: 'Task to add to multiple lists',
-    _id: '6086928db8d557603201e2d4',
-  },
-];
 // TODO: Maybe move into Containers / Features since this is doing stuff now?
 
 export function AddTask({ listId, sectionId }) {
+  const tasksInOtherLists = useSelector(selectTasksInOtherLists);
   const dispatch = useDispatch();
 
   const [taskTitle, setTask] = useState('');
+  // TODO: Move this out into the Redux store
   const [matchingTasks, setMatchingTasks] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
 
@@ -69,11 +66,10 @@ export function AddTask({ listId, sectionId }) {
         <AutocompleteItem
           className="AddTask__autocomplete-item"
           key={task._id}
-          taskId={task._id}
+          task={task}
           listId={listId}
           sectionId={sectionId}
           handleAddExistingTask={handleAddExistingTask}
-          taskTitle={task.title}
         />
       ))}
     </div>

@@ -24,7 +24,9 @@ export function Section({
       title={task.title}
       complete={task.complete}
       notes={task.notes}
+      lists={task.lists}
       sectionId={sectionId}
+      currentListId={listId}
     />
   ));
   return (

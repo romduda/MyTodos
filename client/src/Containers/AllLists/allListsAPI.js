@@ -1,5 +1,5 @@
 const baseUrl = 'http://localhost:3001';
-const userId = '6082bc9b79cecad6de997c64';
+const userId = '60871178721df63b1cbd1593';
 
 export async function fetchAllLists() {
   try {

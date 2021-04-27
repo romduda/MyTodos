@@ -1,0 +1,14 @@
+.AutocompleteItem {
+  display: flex;
+  align-items: center;
+}
+
+.AutocompleteItem__other-list-task-is-in {
+  font-size: 0.85rem;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  padding: 1px 3px;
+  color: darkgray;
+  margin: 0 0.1rem;
+}
+
