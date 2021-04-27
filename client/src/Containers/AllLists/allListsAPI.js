@@ -25,6 +25,20 @@ export async function addList(title) {
   }
 }
 
+export async function updateListsOrderInDb(lists) {
+  try {
+    const res = await fetch(`${baseUrl}/users/${userId}/lists`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lists }),
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error); // eslint-disable-line
+    return null;
+  }
+}
+
 export async function deleteList(listId) {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists/${listId}`, {

@@ -9,7 +9,7 @@ import { AddList } from '../../Components/AddList/AddList';
 import {
   fetchAllListsAsync,
   addListAsync,
-  updateListsOrder,
+  updateListsOrderAsync,
   selectLists,
   selectStatus,
 } from './allListsSlice';
@@ -29,6 +29,13 @@ export function AllLists() {
   }, [dispatch]);
 
   let loadingIndicator;
+  // TODO: The component isn't re-rendering when reorder the list, so this
+  // indicator isn't changing when it should.
+  if (status === 'syncing with database') {
+    loadingIndicator = (
+      <div>Syncing with database...</div>
+    );
+  }
   if (status === 'loading') {
     loadingIndicator = (
       <div>Loading...</div>
@@ -52,7 +59,7 @@ export function AllLists() {
       return;
     }
 
-    dispatch(updateListsOrder({ source, destination }));
+    dispatch(updateListsOrderAsync({ source, destination }));
   }
 
   const renderedLists = lists.map((list, index) => (

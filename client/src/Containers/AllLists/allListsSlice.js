@@ -5,6 +5,7 @@ import _ from 'lodash';
 import {
   fetchAllLists,
   addList,
+  updateListsOrderInDb,
   deleteList,
   addSection,
   deleteSection,
@@ -34,6 +35,17 @@ export const addListAsync = createAsyncThunk(
   'allLists/addList',
   // The value we return becomes the `fulfilled` action payload
   async (title) => addList(title),
+);
+
+export const updateListsOrderAsync = createAsyncThunk(
+  'allLists/updateListsOrder',
+  // The value we return becomes the `fulfilled` action payload
+  async (lists, { dispatch, getState }) => {
+    // eslint-disable-next-line no-use-before-define
+    await dispatch(updateListsOrder(lists));
+    const updatedListIds = _.map(getState().allLists.lists, '_id');
+    updateListsOrderInDb(updatedListIds);
+  },
 );
 
 export const deleteListAsync = createAsyncThunk(
@@ -125,6 +137,12 @@ export const allListsSlice = createSlice({
       .addCase(addListAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
+      })
+      .addCase(updateListsOrderAsync.pending, (state) => {
+        state.status = 'syncing with database';
+      })
+      .addCase(updateListsOrderAsync.fulfilled, (state) => {
+        state.status = 'idle';
       })
       .addCase(deleteListAsync.pending, (state) => {
         state.status = 'loading';
