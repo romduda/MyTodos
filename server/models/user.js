@@ -2,8 +2,6 @@ const { Schema } = require('mongoose');
 
 const mongoose = require('./index');
 
-const listSchema = require('./schemas/list');
-
 const userSchema = Schema({
   firstName: {
     type: String,
@@ -26,7 +24,7 @@ const userSchema = Schema({
     default: '',
   },
   lists: {
-    type: [listSchema],
+    type: [{ type: Schema.Types.ObjectId, ref: 'List' }],
     required: true,
     default: [],
   },

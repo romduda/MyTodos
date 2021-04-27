@@ -21,10 +21,10 @@ const taskSchema = Schema({
     required: true,
     ref: 'User',
   },
-  // lists: {
-  //   type: [{ type: Schema.Types.ObjectId, ref: 'List' }],
-  //   require: true,
-  // },
+  lists: {
+    type: [{ type: Schema.Types.ObjectId, ref: 'List' }],
+    require: true,
+  },
   // sections: {
   //   type: [{ type: Schema.Types.ObjectId, ref: 'Section' }],
   //   require: true,

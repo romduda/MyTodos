@@ -1,4 +1,5 @@
 const user = require('../models/user');
+const list = require('../models/list');
 const task = require('../models/task');
 
 // This is creating a task that doesn't exist yet in any list
@@ -10,20 +11,24 @@ async function addNewTask(req, res) {
     const newTask = await task.create({
       title: req.body.title,
       user: userId,
-      // lists: [listId],
+      lists: [listId],
       // sections: [sectionId],
     });
-    const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    const section = await list.sections.id(sectionId);
+    const currList = await list.findById(listId);
+    const section = await currList.sections.id(sectionId);
     section.tasks = [newTask._id, ...section.tasks];
-    const updatedUser = await currUser.save();
+    await currList.save();
+    const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })
@@ -45,17 +50,26 @@ async function addExistingTask(req, res) {
     return res.status(400).send({ message: 'Body did not include "taskId" property' });
   }
   try {
-    const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    const section = await list.sections.id(sectionId);
+    await task.findByIdAndUpdate(
+      req.body.taskId,
+      { $addToSet: { lists: listId } },
+      { new: true },
+    );
+    const currList = await list.findById(listId);
+    const section = await currList.sections.id(sectionId);
     section.tasks = [req.body.taskId, ...section.tasks];
-    const updatedUser = await currUser.save();
+    await currList.save();
+    const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })
@@ -87,6 +101,10 @@ async function updateTask(req, res) {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })

@@ -1,4 +1,5 @@
 const user = require('../models/user');
+const list = require('../models/list');
 
 async function getLists(req, res) {
   const { userId } = req.params;
@@ -11,6 +12,10 @@ async function getLists(req, res) {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })
@@ -32,12 +37,14 @@ async function addList(req, res) {
     const { userId } = req.params;
     try {
       // Create new list, with default section
+      const newList = await list.create({
+        title: req.body.title,
+        sections: [{ isDefaultSection: true }],
+        userId,
+      });
       const { lists } = await user.findById(userId);
       const updatedUser = await user.findByIdAndUpdate(userId, {
-        lists: [{
-          title: req.body.title,
-          sections: [{ isDefaultSection: true }],
-        }, ...lists],
+        lists: [newList._id, ...lists],
       },
       { new: true });
       const populatedUser = await updatedUser.populate({
@@ -46,6 +53,10 @@ async function addList(req, res) {
           path: 'sections',
           populate: {
             path: 'tasks',
+            populate: {
+              path: 'lists',
+              select: 'title color',
+            },
           },
         },
       })
@@ -64,16 +75,22 @@ async function deleteList(req, res) {
   const { listId } = req.params;
   const { userId } = req.params;
   try {
-    const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    await list.remove();
-    const updatedUser = await currUser.save();
+    await list.findByIdAndDelete(listId);
+    // TODO: Get the tasks from the list remove references to the listId
+    // from their list property, so that keep the database cleaner
+    const updatedUser = await user.findByIdAndUpdate(userId,
+      { $pull: { lists: listId } },
+      { new: true });
     const populatedUser = await updatedUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })

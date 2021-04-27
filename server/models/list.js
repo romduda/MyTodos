@@ -1,6 +1,8 @@
 const { Schema } = require('mongoose');
 
-const sectionSchema = require('./section');
+const mongoose = require('./index');
+
+const sectionSchema = require('./schemas/section');
 
 const listSchema = Schema({
   title: {
@@ -18,6 +20,13 @@ const listSchema = Schema({
     required: true,
     default: [],
   },
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 }, { timestamps: true });
 
-module.exports = listSchema;
+const List = mongoose.model('List', listSchema);
+
+module.exports = List;

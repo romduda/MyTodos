@@ -1,19 +1,24 @@
 const user = require('../models/user');
+const list = require('../models/list');
+const task = require('../models/task');
 
 async function addSection(req, res) {
   const { userId } = req.params;
   const { listId } = req.params;
   try {
-    const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    list.sections = [...list.sections, { title: req.body.title }];
-    const updatedUser = await currUser.save();
+    await list.findByIdAndUpdate(listId,
+      { $push: { sections: { title: req.body.title } } });
+    const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })
@@ -36,24 +41,35 @@ async function deleteSection(req, res) {
   const { listId } = req.params;
   const { sectionId } = req.params;
   try {
-    const currUser = await user.findById(userId);
-    const list = await currUser.lists.id(listId);
-    const section = await list.sections.id(sectionId);
-    await section.remove();
-    const updatedUser = await currUser.save();
+    const currList = await list.findById(listId);
+    const section = await currList.sections.id(sectionId);
+    const deletedSection = await section.remove();
+    console.log('deletedSection', deletedSection);
+    await currList.save();
+    // Get the tasks from the deleted section, and remove the list ID from each
+    // of them.
+    await deletedSection.tasks.forEach(async (taskId) => {
+      await task.findByIdAndUpdate(taskId,
+        { $pull: { lists: listId } });
+    });
+    const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
       populate: {
         path: 'sections',
         populate: {
           path: 'tasks',
+          populate: {
+            path: 'lists',
+            select: 'title color',
+          },
         },
       },
     })
       .execPopulate();
     res.status(200).send(populatedUser.lists);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
     console.error(error); // eslint-disable-line
   }
