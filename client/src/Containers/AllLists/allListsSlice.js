@@ -67,6 +67,24 @@ export const updateTasksOrderAsync = createAsyncThunk(
   },
 );
 
+export const updateSectionsOrderAsync = createAsyncThunk(
+  'allLists/updateSectionsOrder',
+  // The value we return becomes the `fulfilled` action payload
+  async (sections, { dispatch, getState }) => {
+    // eslint-disable-next-line no-use-before-define
+    await dispatch(updateSectionsOrder(sections));
+    const currListId = getState().allLists.currentList._id;
+    const updatedSections = _.map(getState().allLists.currentList.sections, (section) => {
+      const currSection = {
+        _id: section._id,
+        tasks: _.map(section.tasks, '_id'),
+      };
+      return currSection;
+    });
+    updateTasksOrderInDb(currListId, updatedSections);
+  },
+);
+
 export const deleteListAsync = createAsyncThunk(
   'allLists/deleteList',
   // The value we return becomes the `fulfilled` action payload
@@ -122,6 +140,11 @@ export const allListsSlice = createSlice({
       const { source, destination } = action.payload;
       const [movedList] = state.lists.splice(source.index, 1);
       state.lists.splice(destination.index, 0, movedList);
+    },
+    updateSectionsOrder: (state, action) => {
+      const { source, destination } = action.payload;
+      const [movedSection] = state.currentList.sections.splice(source.index, 1);
+      state.currentList.sections.splice(destination.index, 0, movedSection);
     },
     updateTasksOrder: (state, action) => {
       const { source, destination } = action.payload;
@@ -235,7 +258,13 @@ export const allListsSlice = createSlice({
 });
 
 export const {
-  increment, decrement, updateListsOrder, showList, setTaskTitle, updateTasksOrder,
+  increment,
+  decrement,
+  updateListsOrder,
+  showList,
+  setTaskTitle,
+  updateTasksOrder,
+  updateSectionsOrder,
 } = allListsSlice.actions;
 
 // The function below is called a selector and allows us to select a value from

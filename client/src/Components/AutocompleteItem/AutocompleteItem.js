@@ -14,8 +14,6 @@ export function AutocompleteItem({
     listId,
     sectionId,
   };
-  console.log('task inside AutocompleteItem component', task);
-  console.log('task.lists inside AutocompleteItem component', task.lists);
   const lists = task.lists.map((list) => (
     <div className="AutocompleteItem__other-list-task-is-in">{list.title}</div>
   ));

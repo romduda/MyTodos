@@ -73,7 +73,7 @@ export function Task({
     if (res) {
       setEditing(false);
     } else {
-      console.warn('Problem editing task title');
+      console.warn('Problem editing task title'); // eslint-disable-line
     }
   }
 

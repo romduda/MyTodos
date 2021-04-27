@@ -2,12 +2,21 @@
 import './SelectedList.css';
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { selectCurrentList, updateTasksOrderAsync } from '../AllLists/allListsSlice';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import styled from 'styled-components';
+import {
+  selectCurrentList,
+  updateTasksOrderAsync,
+  updateSectionsOrderAsync,
+} from '../AllLists/allListsSlice';
 import { selectShowAddSectionForm } from './selectedListSlice';
 import { Section } from '../../Components/Section/Section';
 import { ListMenu } from '../../Components/ListMenu/ListMenu';
 import { AddSection } from '../../Components/AddSection/AddSection';
+
+const SectionsWrap = styled.div`
+  padding: 8px;
+  `;
 
 export function SelectedList() {
   const currentList = useSelector(selectCurrentList);
@@ -15,7 +24,7 @@ export function SelectedList() {
   const dispatch = useDispatch();
 
   function onDragEnd(result) {
-    const { destination, source } = result;
+    const { destination, source, type } = result;
     if (!destination) {
       return;
     }
@@ -27,14 +36,20 @@ export function SelectedList() {
       // eslint-disable-next-line no-useless-return
       return;
     }
-    dispatch(updateTasksOrderAsync({ source, destination }));
+    if (type === 'sections') {
+      dispatch(updateSectionsOrderAsync({ source, destination }));
+    }
+    if (type === 'tasks') {
+      dispatch(updateTasksOrderAsync({ source, destination }));
+    }
   }
 
   let sections;
   if (currentList) {
-    sections = currentList.sections.map((section) => (
+    sections = currentList.sections.map((section, index) => (
       <Section
         key={section._id}
+        sectionIndex={index}
         title={section.title}
         sectionId={section._id}
         listId={currentList._id}
@@ -67,7 +82,17 @@ export function SelectedList() {
         <DragDropContext
           onDragEnd={onDragEnd}
         >
-          {sections}
+          <Droppable droppableId={currentList._id} type="sections">
+            {(provided) => (
+              <SectionsWrap
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {sections}
+                {provided.placeholder}
+              </SectionsWrap>
+            )}
+          </Droppable>
         </DragDropContext>
         {addSectionForm}
       </div>
