@@ -1,0 +1,8 @@
+.AddSection {
+  padding-bottom: 5rem;
+}
+.AddSection input[type="text"] {
+  padding-bottom: 5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+}

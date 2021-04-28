@@ -1,8 +1,13 @@
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  opacity: 0.3; /* Firefox */
+}
+
 .AddTask {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2.15rem;
 }
 form {
   display: flex;
+  align-items: center;
 }
 
 input[type="text"] {
@@ -15,5 +20,12 @@ input[type="text"]:focus {
   outline: none;
 }
 .AddTask__plus-icon {
-  width: 28px;
+  width: 15px;
+  position: relative;
+  bottom: 2px;
+  right: 4px
+}
+
+.AddTask__autocomplete-results {
+  border: 1px solid lightgray;
 }

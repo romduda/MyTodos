@@ -9,11 +9,9 @@ import { useDispatch } from 'react-redux';
 import { setTaskTitle, updateTaskAsync } from '../../Containers/AllLists/allListsSlice';
 
 const Container = styled.div`
-border: 1px solid lightgrey;
 border-radius: 2px;
-padding: 8px;
-margin-bottom: 8px;
-background-color: white;
+margin-bottom: 5px;
+background-color: ${(props) => (props.isDragging ? ' rgb(200, 200, 200)' : 'white')};
 `;
 
 export function Task({
@@ -106,8 +104,11 @@ export function Task({
     );
   }
   const otherListsTaskIsIn = lists.filter((list) => list._id !== currentListId);
-  const renderedLists = otherListsTaskIsIn.map((list) => (
-    <div className="AutocompleteItem__other-list-task-is-in">{list.title}</div>
+  const listsViewing = otherListsTaskIsIn.map((list) => (
+    <div className="Task__other-list-task-is-in">{list.title}</div>
+  ));
+  const listsEditing = otherListsTaskIsIn.map((list) => (
+    <div className="Task__other-list-task-is-in full-names">{list.title}</div>
   ));
   let renderedTask;
   if (!editing) {
@@ -124,23 +125,34 @@ export function Task({
         >
           <div className="Task__title">{title}</div>
         </div>
-        {renderedLists}
+        {listsViewing}
       </div>
     );
   } else {
     renderedTask = (
       <div className="Task__editing-wrap">
-        {renderedCompletion}
-        <form onSubmit={handleSubmit} className="Task__form-edit-title">
-          <input
-            ref={textInput}
-            onChange={handleChange}
-            onKeyDown={handleTextInputKeyDown}
-            value={title}
-            type="text"
-          />
-        </form>
-        {renderedLists}
+        <div className="Task__editing-main">
+          {renderedCompletion}
+          <form onSubmit={handleSubmit} className="Task__form-edit-title">
+            <input
+              ref={textInput}
+              onChange={handleChange}
+              onKeyDown={handleTextInputKeyDown}
+              value={title}
+              type="text"
+            />
+          </form>
+        </div>
+        <div className="Task__editing-details">
+          <div className="Task__editing-other-lists-wrap">
+            {listsEditing}
+          </div>
+          <div className="Task__delete-buttons-wrap">
+            <button className="Task__remove-from-list-button" type="button">Remove from list</button>
+            <button className="Task__delete-button" type="button">Delete from all lists</button>
+          </div>
+
+        </div>
       </div>
     );
   }
@@ -150,11 +162,12 @@ export function Task({
       draggableId={id}
       index={index}
     >
-      {(provided) => (
+      {(provided, snapshot) => (
         <Container
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
+          isDragging={snapshot.isDragging}
         >
           <div className="Task">
             {renderedTask}

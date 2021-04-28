@@ -2,6 +2,9 @@
   display: flex;
 }
 
+.Task__title {
+  white-space: nowrap;
+}
 .Task__checkbox {
   transform: scale(1.3);
   outline-color: 1px solid red;
@@ -25,16 +28,62 @@
   width: 100%;
 }
 
+.Task__editing-main {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0;
+  width: 100%;
+}
 .Task__editing-wrap {
   display: flex;
+  flex-direction: column;
   align-items: center;
   padding: 0.5rem 1rem;
   border: 1px solid gray;
   border-radius: 5px;
   width: 100%;
 }
+.Task__editing-details {
+  display: flex;
+  width: 100%;
+}
+
+.Task__editing-other-lists-wrap {
+  display: flex;
+}
 
 .Task__form-edit-title {
   width: 100%;
 }
 
+.Task__other-list-task-is-in {
+  flex-grow: 0;
+  font-size: 0.85rem;
+  border-radius: 5px;
+  border: 1px solid lightgray;
+  padding: 1px 3px;
+  color: darkgray;
+  margin: 0 0.1rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.Task__delete-buttons-wrap {
+  margin-left: auto;
+}
+
+.Task__delete-button,
+.Task__remove-from-list-button {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  color: rgb(87, 87, 87);
+}
+.Task__remove-from-list-button {
+  margin-right: -1px;
+}
+.Task__delete-button:hover,
+.Task__remove-from-list-button:hover {
+  white-space: nowrap;
+  background-color: rgb(232, 232, 232);
+  cursor: pointer;
+}

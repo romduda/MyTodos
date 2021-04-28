@@ -15,7 +15,6 @@ import { ListMenu } from '../../Components/ListMenu/ListMenu';
 import { AddSection } from '../../Components/AddSection/AddSection';
 
 const SectionsWrap = styled.div`
-  padding: 8px;
   `;
 
 export function SelectedList() {
@@ -74,7 +73,6 @@ export function SelectedList() {
   if (currentList) {
     selectedListComponent = (
       <div className="SelectedList">
-        <div>Backbutton placeholder</div>
         <div className="SelectedList__header">
           <h1>{currentList ? currentList.title : '' }</h1>
           <ListMenu />

@@ -1,11 +1,14 @@
 .SelectedList {
-  border: 1px solid gray;
   padding: 0 1rem;
   margin-left: auto;
   margin-right: auto;
+  width: 100%;
+  padding: 0 20%;
+  overflow-y: auto;
 }
 
 .SelectedList__header {
   display: flex;
   align-items: center;
+  padding: 0.4rem;
 }

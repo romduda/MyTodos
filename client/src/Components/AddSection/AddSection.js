@@ -44,6 +44,7 @@ export function AddSection({ listId }) {
     <div className="AddSection">
       <form onSubmit={handleSubmit}>
         <input
+          className="AddSection__input"
           ref={textInput}
           onChange={handleChange}
           value={section}

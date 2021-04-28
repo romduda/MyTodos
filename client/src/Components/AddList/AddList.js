@@ -36,10 +36,11 @@ export function AddList() {
   );
 
   return (
-    <div className="AddList">
+    <div style={{ marginLeft: '1.2rem' }} className="AddList">
       <form onSubmit={handleSubmit}>
-        <span>+ </span>
+        <span style={{ marginLeft: '2px' }}>+ </span>
         <input
+          style={{ marginLeft: '4px' }}
           onChange={handleChange}
           value={list}
           type="text"

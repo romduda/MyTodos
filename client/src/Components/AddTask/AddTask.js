@@ -60,20 +60,25 @@ export function AddTask({ listId, sectionId }) {
     </div>
   );
 
-  const autocompleteResults = (
-    <div className="AddTask__autocomplete-results">
-      {matchingTasks.map((task) => (
-        <AutocompleteItem
-          className="AddTask__autocomplete-item"
-          key={task._id}
-          task={task}
-          listId={listId}
-          sectionId={sectionId}
-          handleAddExistingTask={handleAddExistingTask}
-        />
-      ))}
-    </div>
-  );
+  let autocompleteResults;
+  if (matchingTasks.length > 0) {
+    autocompleteResults = (
+      <div className="AddTask__autocomplete-results">
+        {matchingTasks.map((task) => (
+          <AutocompleteItem
+            className="AddTask__autocomplete-item"
+            key={task._id}
+            task={task}
+            listId={listId}
+            sectionId={sectionId}
+            handleAddExistingTask={handleAddExistingTask}
+          />
+        ))}
+      </div>
+    );
+  } else {
+    autocompleteResults = '';
+  }
 
   return (
     <div className="AddTask">

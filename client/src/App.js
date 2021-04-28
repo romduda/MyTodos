@@ -10,6 +10,7 @@ function App() {
         <AllLists />
         <SelectedList />
       </main>
+      <footer />
     </div>
   );
 }

@@ -15,7 +15,9 @@ import {
 } from './allListsSlice';
 
 const ListItemsWrap = styled.div`
-  padding: 8px;
+padding: 0.5rem;
+margin: 0.5rem;
+background-color: ${(props) => (props.isDraggingOver ? 'rgb(250, 250, 250)' : 'white')};
   `;
 
 export function AllLists() {
@@ -33,7 +35,7 @@ export function AllLists() {
   // indicator isn't changing when it should.
   if (status === 'syncing with database') {
     loadingIndicator = (
-      <div>Syncing with database...</div>
+      <div>Syncing...</div>
     );
   }
   if (status === 'loading') {
@@ -43,7 +45,7 @@ export function AllLists() {
   }
   if (status === 'idle') {
     loadingIndicator = (
-      <div>✓ Synced with database</div>
+      <div>✓ Synced with server</div>
     );
   }
   function onDragEnd(result) {
@@ -72,16 +74,17 @@ export function AllLists() {
   ));
   return (
     <div className="AllLists">
+      <h1 style={{ marginLeft: '1.1rem' }}>Lists</h1>
+      <div style={{ marginLeft: '1.2rem', marginBottom: '1rem' }} className="AllLists__loadingIndicator">{loadingIndicator}</div>
+      <AddList addListHandler={addListAsync} />
       <DragDropContext
         onDragEnd={onDragEnd}
       >
-        <h1>Lists</h1>
-        <div className="AllLists__loadingIndicator">{loadingIndicator}</div>
-        <AddList addListHandler={addListAsync} />
         <Droppable droppableId="lists">
-          {(provided) => (
+          {(provided, snapshot) => (
             <ListItemsWrap
               ref={provided.innerRef}
+              isDraggingOver={snapshot.isDraggingOver}
               {...provided.droppableProps}
             >
               {renderedLists}

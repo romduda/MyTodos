@@ -12,7 +12,8 @@ const SectionsWrap = styled.div`
   padding: 8px;
   `;
 const TasksWrap = styled.div`
-  padding: 8px;
+  padding: 0.5rem;
+  background-color: ${(props) => (props.isDraggingOver ? 'rgb(250, 250, 250)' : 'white')};
   `;
 
 export function Section({
@@ -62,9 +63,10 @@ export function Section({
             </div>
             <AddTask sectionId={sectionId} listId={listId} />
             <Droppable droppableId={sectionId} type="tasks">
-              {(provided) => (
+              {(provided, snapshot) => (
                 <TasksWrap
                   ref={provided.innerRef}
+                  isDraggingOver={snapshot.isDraggingOver}
                   {...provided.droppableProps}
                 >
                   {renderedTasks}
