@@ -191,7 +191,11 @@ export const allListsSlice = createSlice({
       .addCase(fetchAllListsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.lists = action.payload;
-        state.currentList = null;
+        if (state.lists && state.lists.length) {
+          [state.currentList] = state.lists;
+        } else {
+          state.currentList = null;
+        }
       })
       .addCase(addListAsync.pending, (state) => {
         state.status = 'loading';
