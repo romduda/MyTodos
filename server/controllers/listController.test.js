@@ -29,7 +29,7 @@ describe('getLists', () => {
 
     await getLists(mReq, mRes);
 
-    expect(mRes.status).not.toHaveBeenCalledWith(200);
+    expect(mRes.status).toHaveBeenCalledWith(200);
     expect(mRes.send).toHaveBeenCalledWith('Hi there');
   });
 });
