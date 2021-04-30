@@ -10,9 +10,9 @@ mongoose.connect(`${DB_URL}/${DB_NAME}`, {
   useFindAndModify: false,
 }, (error) => {
   if (error) {
-    console.error(`Problem connecting to Mongo: ${error}`); // eslint-disable-line
+    // console.error(`Problem connecting to Mongo: ${error}`); // eslint-disable-line
   } else {
-    console.log('Connected to Mongo 🤝'); // eslint-disable-line
+    // console.log('Connected to Mongo 🤝'); // eslint-disable-line
   }
 });
 

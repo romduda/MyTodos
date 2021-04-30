@@ -20,6 +20,8 @@ async function getLists(req, res) {
       },
     })
       .execPopulate();
+    // eslint-disable-next-line no-console
+    console.log('🤪🤪🤪🤪', populatedUser);
     res.status(200);
     res.send(populatedUser.lists);
   } catch (error) {
