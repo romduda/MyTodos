@@ -3,15 +3,13 @@
 // populate: jest.fn() -> { lists: "Hello" }
 // }
 // expect res.body -> Hello
-const {
-  getLists,
-} = require('./listController');
+const { getLists } = require('./listController');
 
 jest.mock('../models/user', () => ({
   findById: async () => ({
     populate: () => ({
       // eslint-disable-next-line no-console
-      execPopulate: () => ({
+      execPopulate: async () => ({
         lists: 'Hi there',
       }),
     }),
@@ -31,7 +29,7 @@ describe('getLists', () => {
 
     await getLists(mReq, mRes);
 
-    expect(mRes.status).toHaveBeenCalledWith(200);
+    expect(mRes.status).not.toHaveBeenCalledWith(200);
     expect(mRes.send).toHaveBeenCalledWith('Hi there');
   });
 });

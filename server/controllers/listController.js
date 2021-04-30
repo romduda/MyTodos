@@ -6,22 +6,21 @@ async function getLists(req, res) {
   try {
     // TODO: should throw error if user does not exist, and not hang
     const currUser = await user.findById(userId);
-    const populatedUser = await currUser.populate({
-      path: 'lists',
-      populate: {
-        path: 'sections',
+    const populatedUser = await currUser
+      .populate({
+        path: 'lists',
         populate: {
-          path: 'tasks',
+          path: 'sections',
           populate: {
-            path: 'lists',
-            select: 'title color',
+            path: 'tasks',
+            populate: {
+              path: 'lists',
+              select: 'title color',
+            },
           },
         },
-      },
-    })
+      })
       .execPopulate();
-    // eslint-disable-next-line no-console
-    console.log('🤪🤪🤪🤪', populatedUser);
     res.status(200);
     res.send(populatedUser.lists);
   } catch (error) {
@@ -45,23 +44,27 @@ async function addList(req, res) {
         userId,
       });
       const { lists } = await user.findById(userId);
-      const updatedUser = await user.findByIdAndUpdate(userId, {
-        lists: [newList._id, ...lists],
-      },
-      { new: true });
-      const populatedUser = await updatedUser.populate({
-        path: 'lists',
-        populate: {
-          path: 'sections',
+      const updatedUser = await user.findByIdAndUpdate(
+        userId,
+        {
+          lists: [newList._id, ...lists],
+        },
+        { new: true }
+      );
+      const populatedUser = await updatedUser
+        .populate({
+          path: 'lists',
           populate: {
-            path: 'tasks',
+            path: 'sections',
             populate: {
-              path: 'lists',
-              select: 'title color',
+              path: 'tasks',
+              populate: {
+                path: 'lists',
+                select: 'title color',
+              },
             },
           },
-        },
-      })
+        })
         .execPopulate();
       res.status(201);
       res.send(populatedUser.lists);
@@ -76,10 +79,13 @@ async function addList(req, res) {
 async function updateListsOrder(req, res) {
   try {
     const { userId } = req.params;
-    const updatedUser = await user.findByIdAndUpdate(userId, {
-      lists: [...req.body.lists],
-    },
-    { new: true });
+    const updatedUser = await user.findByIdAndUpdate(
+      userId,
+      {
+        lists: [...req.body.lists],
+      },
+      { new: true }
+    );
     res.status(200);
     res.send(updatedUser.lists);
   } catch (error) {
@@ -125,22 +131,25 @@ async function deleteList(req, res) {
     await list.findByIdAndDelete(listId);
     // TODO: Get the tasks from the list remove references to the listId
     // from their list property, so that keep the database cleaner
-    const updatedUser = await user.findByIdAndUpdate(userId,
+    const updatedUser = await user.findByIdAndUpdate(
+      userId,
       { $pull: { lists: listId } },
-      { new: true });
-    const populatedUser = await updatedUser.populate({
-      path: 'lists',
-      populate: {
-        path: 'sections',
+      { new: true }
+    );
+    const populatedUser = await updatedUser
+      .populate({
+        path: 'lists',
         populate: {
-          path: 'tasks',
+          path: 'sections',
           populate: {
-            path: 'lists',
-            select: 'title color',
+            path: 'tasks',
+            populate: {
+              path: 'lists',
+              select: 'title color',
+            },
           },
         },
-      },
-    })
+      })
       .execPopulate();
     res.status(200).send(populatedUser.lists);
   } catch (error) {
