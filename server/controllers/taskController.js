@@ -14,10 +14,13 @@ async function addNewTask(req, res) {
       lists: [listId],
       // sections: [sectionId],
     });
+    // console.log(newTask)
     const currList = await list.findById(listId);
+    // console.log(currList)
     const section = await currList.sections.id(sectionId);
-    section.tasks = [newTask._id, ...section.tasks];
-    await currList.save();
+    // console.log(section)
+    section.tasks = [newTask._id, ...section.tasks]; // mock or not test ?
+    await currList.save(); // mock or not test ?
     const updatedUser = await user.findById(userId);
     const populatedUser = await updatedUser.populate({
       path: 'lists',
