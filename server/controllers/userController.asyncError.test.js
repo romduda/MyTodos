@@ -9,7 +9,7 @@ jest.mock('../models/user', () => ({
   },
 }));
 
-describe('addUser fail', () => {
+describe('addUser async fail', () => {
   it('should throw an error if creating the user was not possible', async () => {
     const mReq = {
       body: {

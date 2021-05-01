@@ -3,7 +3,6 @@ const {
   addExistingTask,
   updateTask,
   deleteTask,
-
 } = require('./taskController');
 
 jest.mock('../models/task', () => ({
@@ -38,7 +37,7 @@ jest.mock('../models/user', () => ({
   }),
 }));
 
-describe('addnewTask fail', () => {
+describe('addnewTask async fail', () => {
   it('should throw an error if creating a task and processing is error prone', async () => {
     const mReq = {
       body: {
@@ -56,6 +55,30 @@ describe('addnewTask fail', () => {
     };
 
     await addNewTask(mReq, mRes);
+
+    expect(mRes.status).toHaveBeenCalledWith(500);
+    expect(mRes.send).toHaveBeenCalledWith({ message: 'Could not add task' });
+  });
+});
+
+describe('addExistingTask async fail', () => {
+  it('should throw an error if adding of an exsiting task and processing is error prone', async () => {
+    const mReq = {
+      body: {
+        taskId: '507f1f77bcf86cd799439014',
+      },
+      params: {
+        userId: '507f1f77bcf86cd799439011',
+        listId: '507f1f77bcf86cd799439012',
+        sectionId: '507f1f77bcf86cd799439013',
+      },
+    };
+    const mRes = {
+      status: jest.fn(),
+      send: jest.fn(),
+    };
+
+    await addExistingTask(mReq, mRes);
 
     expect(mRes.status).toHaveBeenCalledWith(500);
     expect(mRes.send).toHaveBeenCalledWith({ message: 'Could not add task' });

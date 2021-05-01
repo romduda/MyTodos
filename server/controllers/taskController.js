@@ -50,7 +50,9 @@ async function addExistingTask(req, res) {
   const { listId } = req.params;
   const { sectionId } = req.params;
   if (!req.body.taskId) {
-    return res.status(400).send({ message: 'Body did not include "taskId" property' });
+    res.status(400);
+    res.send({ message: 'Body did not include "taskId" property' });
+    // return res.status(400).send({ message: 'Body did not include "taskId" property' }); // return
   }
   try {
     await task.findByIdAndUpdate(
@@ -81,7 +83,7 @@ async function addExistingTask(req, res) {
     return res.send(populatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could not add task' });
+    res.send({ message: 'Could not add task' }); //  error,
     return console.error(error); // eslint-disable-line
   }
 }
