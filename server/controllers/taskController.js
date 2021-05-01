@@ -94,12 +94,14 @@ async function updateTask(req, res) {
   const { taskId } = req.params;
   const { userId } = req.params;
   try {
-    await task.findByIdAndUpdate(
+    await task.findByIdAndUpdate( // need to refactor code to fail
       taskId,
       req.body,
       { new: true },
     );
+    // console.log(userId)
     const currUser = await user.findById(userId);
+    // console.log(currUser)
     const populatedUser = await currUser.populate({
       path: 'lists',
       populate: {
@@ -118,7 +120,7 @@ async function updateTask(req, res) {
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
-    res.send({ error: JSON.stringify(error), message: 'Could not update task' });
+    res.send({ message: 'Could not update task' }); // error: JSON.stringify(error),
     console.error(error); // eslint-disable-line
   }
 }
@@ -129,15 +131,19 @@ async function deleteTask(req, res) {
   const { sectionId } = req.params;
   try {
     const currUser = await user.findById(userId);
+    console.log(currUser)
     const list = await currUser.lists.id(listId);
+    console.log(list)
     const section = await list.sections.id(sectionId);
+    console.log(section)
     await section.remove();
     const updatedUser = await currUser.save();
+    console.log(updatedUser)
     res.status(201);
     res.send(updatedUser);
   } catch (error) {
     res.status(400);
-    res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
+    res.send({ message: 'Could not delete section' }); //  error: JSON.stringify(error),
     console.error(error); // eslint-disable-line
   }
 }
