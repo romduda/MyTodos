@@ -49,11 +49,16 @@ describe.only('addSection', () => {
     });
 
     it('should handle user model throwing', async () => {
-      user.findById.mockRejectedValue(new Error('Test'));
+      const mockErr = new Error('Test👘🐼🐼');
+      user.findById.mockRejectedValue(mockErr);
 
       await addSection(mReq, mRes);
 
-      expect(mRes.status).not.toBeCalledWith(400);
+      expect(mRes.status).toBeCalledWith(400);
+      expect(mRes.send).toBeCalledWith({
+        error: mockErr,
+        message: 'Could not add section',
+      });
     });
   });
 });

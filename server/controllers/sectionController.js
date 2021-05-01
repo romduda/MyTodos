@@ -30,6 +30,7 @@ async function addSection(req, res) {
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
+    console.log(error);
     res.send({ error, message: 'Could not add section' });
     // console.error(error); // eslint-disable-line
   }
