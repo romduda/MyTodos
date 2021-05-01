@@ -6,20 +6,11 @@ const {
 
 } = require('./taskController');
 
-// jest.mock('../models/task', () => ({
-//   create: async () => {
-//     const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
-//     await asyncMock();
-//   },
-// }));
-
 jest.mock('../models/task', () => ({
-  create: async () => ({
-    _id: 123,
-    title: 'mock create: new task',
-    user: '507f1f77bcf86cd799439011',
-    list: ['507f1f77bcf86cd799439012'],
-  }),
+  create: async () => {
+    const asyncMock = jest.fn().mockRejectedValue(new Error('Async error'));
+    await asyncMock();
+  },
 }));
 
 jest.mock('../models/list', () => ({
@@ -47,8 +38,8 @@ jest.mock('../models/user', () => ({
   }),
 }));
 
-describe('addNewTask', () => {
-  it('should add a new task and return user lists', async () => {
+describe('addnewTask fail', () => {
+  it('should throw an error if creating a task and processing is error prone', async () => {
     const mReq = {
       body: {
         title: 'request: new task',
@@ -66,20 +57,7 @@ describe('addNewTask', () => {
 
     await addNewTask(mReq, mRes);
 
-    expect(mRes.status).toHaveBeenCalledWith(201);
-    expect(mRes.send).toHaveBeenCalledWith('some lists');
+    expect(mRes.status).toHaveBeenCalledWith(500);
+    expect(mRes.send).toHaveBeenCalledWith({ message: 'Could not add task' });
   });
 });
-
-// describe('addExistingTask', () => {
-//   it('should add a new task by updating the lists and sections and return user lists', async () => {
-//   });
-// });
-// describe('updateTask', () => {
-//   it('should update a task and return user lists', async () => {
-//   });
-// });
-// describe('deleteTask', () => {
-//   it('should delete a task, remove the section and return the updated user', async () => {
-//   });
-// });
