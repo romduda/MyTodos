@@ -6,29 +6,33 @@ async function addSection(req, res) {
   const { userId } = req.params;
   const { listId } = req.params;
   try {
-    await list.findByIdAndUpdate(listId,
-      { $push: { sections: { title: req.body.title } } });
+    await list.findByIdAndUpdate(listId, {
+      $push: { sections: { title: req.body.title } },
+    });
     const updatedUser = await user.findById(userId);
-    const populatedUser = await updatedUser.populate({
-      path: 'lists',
-      populate: {
-        path: 'sections',
+    const populatedUser = await updatedUser
+      .populate({
+        path: 'lists',
         populate: {
-          path: 'tasks',
+          path: 'sections',
           populate: {
-            path: 'lists',
-            select: 'title color',
+            path: 'tasks',
+            populate: {
+              path: 'lists',
+              select: 'title color',
+            },
           },
         },
-      },
-    })
+      })
       .execPopulate();
+    console.log(populatedUser);
     res.status(201);
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(400);
+    console.log(error);
     res.send({ error, message: 'Could not add section' });
-    console.error(error); // eslint-disable-line
+    // console.error(error); // eslint-disable-line
   }
 }
 
@@ -48,28 +52,31 @@ async function deleteSection(req, res) {
     // Get the tasks from the deleted section, and remove the list ID from each
     // of them.
     await deletedSection.tasks.forEach(async (taskId) => {
-      await task.findByIdAndUpdate(taskId,
-        { $pull: { lists: listId } });
+      await task.findByIdAndUpdate(taskId, { $pull: { lists: listId } });
     });
     const updatedUser = await user.findById(userId);
-    const populatedUser = await updatedUser.populate({
-      path: 'lists',
-      populate: {
-        path: 'sections',
+    const populatedUser = await updatedUser
+      .populate({
+        path: 'lists',
         populate: {
-          path: 'tasks',
+          path: 'sections',
           populate: {
-            path: 'lists',
-            select: 'title color',
+            path: 'tasks',
+            populate: {
+              path: 'lists',
+              select: 'title color',
+            },
           },
         },
-      },
-    })
+      })
       .execPopulate();
     res.status(200).send(populatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error: JSON.stringify(error), message: 'Could not delete section' });
+    res.send({
+      error: JSON.stringify(error),
+      message: 'Could not delete section',
+    });
     console.error(error); // eslint-disable-line
   }
 }
