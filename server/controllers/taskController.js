@@ -40,7 +40,7 @@ async function addNewTask(req, res) {
     res.send(populatedUser.lists);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could not add task' });
+    res.send({ message: 'Could not add task' }); // error,
     console.error(error); // eslint-disable-line
   }
 }
