@@ -1,7 +1,11 @@
 /**
  * @jest-environment node
  */
-const { addSection, updateSection } = require('./sectionController');
+const {
+  addSection,
+  updateSection,
+  deleteSection,
+} = require('./sectionController');
 const list = require('../models/list');
 const user = require('../models/user');
 
@@ -20,7 +24,7 @@ const mockExecPopulate = jest.fn();
 let mReq;
 let mRes;
 
-describe.only('sectionController', () => {
+describe('sectionController', () => {
   describe('addSection', () => {
     beforeEach(() => {
       mReq = {
@@ -34,6 +38,9 @@ describe.only('sectionController', () => {
         status: jest.fn(),
         send: jest.fn(),
       };
+      user.findById = jest.fn();
+      list.findByIdAndUpdate = jest.fn();
+      list.findById = jest.fn();
     });
 
     it('should add section', async () => {
@@ -112,6 +119,91 @@ describe.only('sectionController', () => {
 
       expect(mRes.status).toBeCalledWith(200);
       expect(mockResEnd).toHaveBeenCalled();
+    });
+  });
+  describe('deleteSection', () => {
+    const mockListIdCall = jest.fn();
+    let mockList;
+    let mockSection;
+    const mockCallSectionId = jest.fn();
+    const mockSectionRemove = jest.fn();
+    const mockListSave = jest.fn();
+    beforeEach(() => {
+      mReq = {
+        params: {
+          userId: 1,
+          listId: 2,
+          sectionId: 3,
+        },
+      };
+      mRes = {
+        send: jest.fn(),
+        status: jest.fn(),
+      };
+      mockList = {
+        sections: {
+          id: mockListIdCall,
+        },
+        save: mockListSave,
+      };
+      mockSection = {
+        id: mockCallSectionId,
+        remove: mockSectionRemove,
+      };
+      user.findById = jest.fn();
+      list.findByIdAndUpdate = jest.fn();
+      list.findById = jest.fn();
+    });
+
+    it('should delete a section', async () => {
+      // res.send call chained to status
+      const mockResEnd = { send: jest.fn() };
+      mRes.status.mockReturnValue(mockResEnd);
+
+      // controller loops over tasks of deleted sections
+      const mockTasks = [1, 2];
+      mockSection.remove.mockResolvedValue({ tasks: mockTasks });
+
+      // returns single section
+      mockList.sections.id.mockResolvedValue(mockSection);
+      list.findById.mockResolvedValue(mockList);
+
+      mockExecPopulate.mockResolvedValue({ lists: 'Test' });
+      user.findById.mockResolvedValue({
+        populate: () => ({
+          execPopulate: mockExecPopulate,
+        }),
+      });
+      await deleteSection(mReq, mRes);
+
+      expect(mRes.status).toBeCalledWith(200);
+      expect(mockResEnd.send).toBeCalledWith('Test');
+    });
+
+    it('should catch model error', async () => {
+      const mockResEnd = { send: jest.fn() };
+      mRes.status.mockReturnValue(mockResEnd);
+      const mockErr = new Error('Test👘🐼🐼');
+
+      mockSection.remove.mockRejectedValue(mockErr);
+
+      // returns single section
+      mockList.sections.id.mockResolvedValue(mockSection);
+      list.findById.mockResolvedValue(mockList);
+
+      mockExecPopulate.mockResolvedValue({ lists: 'Test' });
+      user.findById.mockResolvedValue({
+        populate: () => ({
+          execPopulate: mockExecPopulate,
+        }),
+      });
+      await deleteSection(mReq, mRes);
+
+      expect(mRes.status).toBeCalledWith(500);
+      expect(mRes.send).toBeCalledWith({
+        error: JSON.stringify(mockErr),
+        message: 'Could not delete section',
+      });
     });
   });
 });
