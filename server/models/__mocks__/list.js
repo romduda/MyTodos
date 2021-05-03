@@ -1,9 +1,7 @@
 const list = {
+  findByIdAndUpdate: async () => {},
   findById: async () => {},
-  save: async () => {},
-  sections: {
-    id: async () => {},
-  },
+  create: async () => {},
 };
 
 module.exports = list;

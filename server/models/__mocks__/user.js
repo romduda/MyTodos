@@ -3,9 +3,8 @@ const user = {
   lastName: 'lastName',
   email: 'email',
   password: 'password',
-  create: () => {},
   findById: () => {},
-  populate: () => {},
+  findByIdAndUpdate: () => {},
 };
 
 module.exports = user;

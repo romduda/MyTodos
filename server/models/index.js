@@ -17,7 +17,7 @@ mongoose.connect(
     } else {
       console.log('Connected to Mongo 🤝'); // eslint-disable-line
     }
-  }
+  } // eslint-disable-line
 );
 
 module.exports = mongoose;
