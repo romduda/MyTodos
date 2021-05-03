@@ -1,16 +1,23 @@
 const { addUser } = require('./userController');
 
-// const userMock = require('../models/__mocks__/user');
+const user = require('../models/user');
 
-jest.mock('../models/user', () => ({
-  create: async () => ({
-    _id: 123,
-    firstName: 'firstName',
-    lastName: 'lastName',
-    email: 'email',
-    password: 'password',
-  }),
-}));
+jest.mock('../models/user');
+
+// Setup
+beforeEach(() => {
+  user.create = jest.fn();
+});
+
+// jest.mock('../models/user', () => ({
+//   create: async () => ({
+//     _id: 123,
+//     firstName: 'firstName',
+//     lastName: 'lastName',
+//     email: 'email',
+//     password: 'password',
+//   }),
+// }));
 
 describe('addUser', () => {
   let userMock;
@@ -24,6 +31,14 @@ describe('addUser', () => {
   });
 
   it('should return message the message with the id of the created user', async () => {
+    const mockCreated = {
+      _id: 123,
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'email',
+      password: 'password',
+    };
+    user.create.mockResolvedValue(mockCreated);
     const mReq = {
       body: {
         ...userMock,
@@ -126,5 +141,22 @@ describe('addUser', () => {
 
     expect(mRes.status).toHaveBeenCalledWith(400);
     expect(mRes.send).toHaveBeenCalledWith({ message: 'Invalid body' });
+  });
+
+  it('should throw an error if creating the user was not possible', async () => {
+    const mockErr = new Error('Test👘🐼🐼');
+    user.create.mockRejectedValue(mockErr);
+
+    const mReq = {
+      body: {
+        ...userMock,
+      },
+    };
+    const mRes = {
+      status: jest.fn(),
+    };
+
+    await addUser(mReq, mRes);
+    expect(mRes.status).toHaveBeenCalledWith(500);
   });
 });

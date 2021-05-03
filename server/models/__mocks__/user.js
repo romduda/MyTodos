@@ -2,7 +2,10 @@ const user = {
   firstName: 'firstName',
   lastName: 'lastName',
   email: 'email',
-  password: 'password'
-}
+  password: 'password',
+  create: () => {},
+  findById: () => {},
+  populate: () => {},
+};
 
 module.exports = user;
