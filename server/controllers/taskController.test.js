@@ -22,14 +22,16 @@ const mockExecPopulate = jest.fn();
 
 // Setup
 beforeEach(() => {
-  user.create = jest.fn();
+  task.create = jest.fn();
+  // user.create = jest.fn();
+  // user.findById = jest.fn();
+
+  list.findById = jest.fn();
+  list.sections = {
+    id: jest.fn(),
+  };
   user.findById = jest.fn();
   user.populate = jest.fn();
-  list.findByIdAndUpdate = jest.fn();
-  list.findById = jest.fn();
-  list.save = jest.fn();
-  list.sections.id = jest.fn();
-  task.create = jest.fn();
   task.findByIdAndUpdate = jest.fn();
 });
 
@@ -99,7 +101,16 @@ describe('addNewTask', () => {
       user: '507f1f77bcf86cd799439011',
       list: ['507f1f77bcf86cd799439012'],
     });
-    task.findByIdAndUpdate.mockResolvedValue(console.log('database: find one and update - task'));
+    list.findById.mockResolvedValue({
+      sections: {
+        id: async () => ({
+          title: 'new section',
+          isDefaultSection: false,
+          tasks: ['507f1f77bcf86cd799439014'],
+        }),
+      },
+      save: jest.fn(),
+    });
 
     mockExecPopulate.mockResolvedValue({ lists: 'some lists' });
     user.findById.mockResolvedValue({
