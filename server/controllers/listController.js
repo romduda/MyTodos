@@ -49,7 +49,7 @@ async function addList(req, res) {
         {
           lists: [newList._id, ...lists],
         },
-        { new: true }
+        { new: true } // eslint-disable-line
       );
       const populatedUser = await updatedUser
         .populate({
@@ -84,7 +84,7 @@ async function updateListsOrder(req, res) {
       {
         lists: [...req.body.lists],
       },
-      { new: true }
+      { new: true } // eslint-disable-line
     );
     res.status(200);
     res.send(updatedUser.lists);
@@ -134,7 +134,7 @@ async function deleteList(req, res) {
     const updatedUser = await user.findByIdAndUpdate(
       userId,
       { $pull: { lists: listId } },
-      { new: true }
+      { new: true } // eslint-disable-line
     );
     const populatedUser = await updatedUser
       .populate({

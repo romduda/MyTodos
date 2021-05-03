@@ -5,6 +5,7 @@ const user = {
   email: 'email',
   password: 'password',
   findById: () => {},
+  findByIdAndUpdate: () => {},
 };
 
 module.exports = user;
