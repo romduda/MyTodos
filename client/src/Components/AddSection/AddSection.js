@@ -25,7 +25,6 @@ export function AddSection({ listId }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const res = await dispatch(addSectionAsync({ title: section, listId }));
-    console.log(res);
     if (res) {
       setShowAlert(false);
       setSection('');

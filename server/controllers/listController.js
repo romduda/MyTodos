@@ -3,6 +3,7 @@ const list = require('../models/list');
 
 async function getLists(req, res) {
   const { userId } = req.params;
+  console.log('request made');
   try {
     // TODO: should throw error if user does not exist, and not hang
     const currUser = await user.findById(userId);

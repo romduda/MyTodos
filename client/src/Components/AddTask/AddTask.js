@@ -35,7 +35,6 @@ export function AddTask({ listId, sectionId }) {
   async function handleSubmit(e) {
     e.preventDefault();
     const res = await dispatch(addNewTaskAsync({ title: taskTitle, listId, sectionId }));
-    console.log(res);
     if (res) {
       setShowAlert(false);
       setTask('');
@@ -50,6 +49,7 @@ export function AddTask({ listId, sectionId }) {
       setTask('');
       setMatchingTasks([]);
     } catch (error) {
+      // TODO: handle error
       console.log(error);
     }
   }
