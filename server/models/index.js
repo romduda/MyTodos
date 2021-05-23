@@ -2,9 +2,19 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const { DB_URL, DB_NAME } = process.env;
+const {
+  DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME,
+} = process.env;
 
-mongoose.connect(`${DB_URL}/${DB_NAME}`, {
+let authentication;
+
+if (DB_USERNAME && DB_PASSWORD) {
+  authentication = `${DB_USERNAME}:${DB_PASSWORD}@`;
+} else {
+  authentication = '';
+}
+
+mongoose.connect(`mongodb://${authentication}${DB_URL}/${DB_NAME}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,
