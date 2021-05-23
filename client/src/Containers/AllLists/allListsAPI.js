@@ -1,4 +1,5 @@
-const baseUrl = 'http://localhost:3001';
+const { REACT_APP_SERVER_URL } = process.env;
+const baseUrl = REACT_APP_SERVER_URL;
 const userId = '60871178721df63b1cbd1593';
 
 export async function fetchAllLists() {
