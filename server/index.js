@@ -11,5 +11,5 @@ app.use(express.json());
 app.use(router);
 
 app.listen(PORT, () => {
-  console.log(`Listening on http://localhost:${PORT}`); // eslint-disable-line
+  console.log(`Server listening on port: ${PORT}`); // eslint-disable-line
 });
