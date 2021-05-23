@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 const {
-  DB_USERNAME, DB_PASSWORD, DB_URL, DB_NAME,
+  DB_USERNAME, DB_PASSWORD, DB_URL = 'localhost:27017', DB_NAME = 'myTodos',
 } = process.env;
 
 let authentication;

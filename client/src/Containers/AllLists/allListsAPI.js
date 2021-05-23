@@ -1,13 +1,14 @@
-const { REACT_APP_SERVER_URL } = process.env;
+const { REACT_APP_SERVER_URL, REACT_APP_USER_ID } = process.env;
 const baseUrl = REACT_APP_SERVER_URL;
-const userId = '60871178721df63b1cbd1593';
+// Before implement user authentication, get userId from .env
+const userId = REACT_APP_USER_ID;
 
 export async function fetchAllLists() {
   try {
     const res = await fetch(`${baseUrl}/users/${userId}/lists`);
     return await res.json();
   } catch (error) {
-    console.error(error); // eslint-disable-line
+    console.error('fetchAllLists failed', error); // eslint-disable-line
     return null;
   }
 }
