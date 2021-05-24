@@ -64,14 +64,14 @@ export function AllLists() {
     dispatch(updateListsOrderAsync({ source, destination }));
   }
 
-  const renderedLists = lists.map((list, index) => (
+  const renderedLists = lists ? lists.map((list, index) => (
     <ListItem
       key={list._id}
       title={list.title}
       id={list._id}
       index={index}
     />
-  ));
+  )) : '';
   return (
     <div className="AllLists">
       <h1 style={{ marginLeft: '1.1rem' }}>Lists</h1>
