@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "install": "cd ./client && npm i && cd ../server && npm i",
+    "lint": "cd ./client && npm run lint && cd .. && cd ./server && npm run lint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
