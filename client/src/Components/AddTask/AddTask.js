@@ -34,6 +34,7 @@ export function AddTask({ listId, sectionId }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (taskTitle.trim() === '') return; // Don't add todo with empty title
     const res = await dispatch(addNewTaskAsync({ title: taskTitle, listId, sectionId }));
     if (res) {
       setShowAlert(false);

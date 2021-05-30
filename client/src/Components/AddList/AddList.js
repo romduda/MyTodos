@@ -19,6 +19,7 @@ export function AddList() {
   }
   async function handleSubmit(e) {
     e.preventDefault();
+    if (list.trim() === '') return; // Don't add list with empty title
     const res = await dispatch(addListAsync(list));
     if (res) {
       setShowAlert(false);

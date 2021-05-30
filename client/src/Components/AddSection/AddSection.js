@@ -24,6 +24,7 @@ export function AddSection({ listId }) {
   }
   async function handleSubmit(e) {
     e.preventDefault();
+    if (section.trim() === '') return; // Don't add section with empty title
     const res = await dispatch(addSectionAsync({ title: section, listId }));
     if (res) {
       setShowAlert(false);
