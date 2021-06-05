@@ -1,4 +1,5 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -9,11 +10,10 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
+export const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-console.log('firebaseConfig', firebaseConfig);
-
-if (firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig);
+// eslint-disable-next-line no-shadow
+export async function getIdToken(firebaseApp) {
+  const token = firebaseApp && await firebaseApp.auth().currentUser.getIdToken();
+  return token;
 }
-
-export default firebase;
