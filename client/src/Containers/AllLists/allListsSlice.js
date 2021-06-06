@@ -190,7 +190,9 @@ export const allListsSlice = createSlice({
       })
       .addCase(fetchAllListsAsync.fulfilled, (state, action) => {
         state.status = 'idle';
-        state.lists = action.payload;
+        if (action.payload) {
+          state.lists = action.payload;
+        }
         if (state.lists && state.lists.length) {
           [state.currentList] = state.lists;
         } else {
