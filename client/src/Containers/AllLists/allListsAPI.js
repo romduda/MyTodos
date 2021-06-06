@@ -1,11 +1,24 @@
+import { firebaseApp, getIdToken } from '../../auth/firebase';
+
 const { REACT_APP_SERVER_URL, REACT_APP_USER_ID } = process.env;
 const baseUrl = REACT_APP_SERVER_URL;
 // Before implement user authentication, get userId from .env
 const userId = REACT_APP_USER_ID;
 
+function getAuthHeader(idToken) {
+  return `Bearer ${idToken}`;
+}
+
 export async function fetchAllLists() {
   try {
-    const res = await fetch(`${baseUrl}/users/${userId}/lists`);
+    const idToken = await getIdToken(firebaseApp);
+    const res = await fetch(`${baseUrl}/users/${userId}/lists`, {
+      method: 'GET',
+      headers: {
+        Authorization: getAuthHeader(idToken),
+        'Content-Type': 'application/json',
+      },
+    });
     return await res.json();
   } catch (error) {
     console.error('fetchAllLists failed', error); // eslint-disable-line
