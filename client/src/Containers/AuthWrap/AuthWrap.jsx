@@ -12,7 +12,7 @@ export function AuthWrap({ children }) {
   useEffect(() => {
     const unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
       if (user) {
-        dispatch(userSignedIn({ user }));
+        dispatch(userSignedIn({ user: JSON.parse(JSON.stringify(user)) }));
       } else {
         dispatch(noUser());
       }
