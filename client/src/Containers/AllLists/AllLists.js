@@ -6,7 +6,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import styled from 'styled-components';
 import { ListItem } from '../../Components/ListItem/ListItem';
 import { AddList } from '../../Components/AddList/AddList';
-import { firebaseApp } from '../../auth/firebase';
+import firebase from '../../auth/firebase';
 import {
   fetchAllListsAsync,
   addListAsync,
@@ -75,7 +75,7 @@ export function AllLists() {
   )) : '';
   return (
     <div className="AllLists">
-      <button type="button" onClick={() => firebaseApp.auth().signOut()}>
+      <button type="button" onClick={() => firebase.auth().signOut()}>
         Sign-out
       </button>
       <h1 style={{ marginLeft: '1.1rem' }}>Lists</h1>

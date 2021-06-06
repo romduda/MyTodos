@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSignedIn, noUser, selectAuthState } from './authSlice';
 
-import { firebaseApp } from '../../auth/firebase';
+import firebase from '../../auth/firebase';
 
 export function AuthWrap({ children }) {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ export function AuthWrap({ children }) {
 
   // Listen to the Firebase Auth state and set the Auth state in Redux.
   useEffect(() => {
-    const unregisterAuthObserver = firebaseApp.auth().onAuthStateChanged((user) => {
+    const unregisterAuthObserver = firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         dispatch(userSignedIn({ user: JSON.parse(JSON.stringify(user)) }));
       } else {

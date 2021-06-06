@@ -10,10 +10,15 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
-export const firebaseApp = firebase.initializeApp(firebaseConfig);
+// export const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+export default firebase;
 
 // eslint-disable-next-line no-shadow
-export async function getIdToken(firebaseApp) {
-  const token = firebaseApp && await firebaseApp.auth().currentUser.getIdToken();
+export async function getIdToken(firebase) {
+  const token = firebase && await firebase.auth().currentUser.getIdToken();
   return token;
 }

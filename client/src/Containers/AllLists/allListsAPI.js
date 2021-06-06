@@ -1,4 +1,4 @@
-import { firebaseApp, getIdToken } from '../../auth/firebase';
+import firebase, { getIdToken } from '../../auth/firebase';
 
 const { REACT_APP_SERVER_URL, REACT_APP_USER_ID } = process.env;
 const baseUrl = REACT_APP_SERVER_URL;
@@ -11,7 +11,7 @@ function getAuthHeader(idToken) {
 
 export async function fetchAllLists() {
   try {
-    const idToken = await getIdToken(firebaseApp);
+    const idToken = await getIdToken(firebase);
     const res = await fetch(`${baseUrl}/users/${userId}/lists`, {
       method: 'GET',
       headers: {
