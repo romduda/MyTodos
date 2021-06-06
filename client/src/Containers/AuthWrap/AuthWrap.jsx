@@ -19,7 +19,7 @@ export function AuthWrap({ children }) {
     });
     // Make sure we un-register Firebase observers when the component unmounts.
     return () => unregisterAuthObserver();
-  }, [authState]);
+  }, []);
 
   let renderedAuthWrap;
   switch (authState.status) {
